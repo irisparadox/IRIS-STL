@@ -5,6 +5,34 @@
 
 _IRIS_BEGIN
 template <class _iTy, isize_t _Size>
+class _iArray_const_iterator {
+public:
+	using value_type = _iTy;
+	using ipointer	 = const _iTy*;
+	using ireference = const _iTy&;
+
+	inline _iArray_const_iterator() noexcept : _Ptr(), _Idx(0) {}
+	inline explicit _iArray_const_iterator(ipointer _Parr, isize_t _Off = 0) noexcept : _Ptr(_Parr), _Idx(_Off) {}
+
+private:
+	ipointer _Ptr;
+	isize_t _Idx;
+};
+
+template <class _iTy, isize_t _Size>
+class _iArray_iterator : public _iArray_const_iterator<_iTy, _Size> {
+public:
+	using _Baseit = _iArray_const_iterator<_iTy, _Size>;
+
+	using value_type = _iTy;
+	using ipointer	 = _iTy*;
+	using ireference = _iTy&;
+
+	inline _iArray_iterator() noexcept {}
+	inline explicit _iArray_iterator(ipointer _Parr, isize_t _Off = 0) noexcept : _Baseit(_Parr, _Off) {}
+};
+
+template <class _iTy, isize_t _Size>
 class iarray {
 public:
 	using value_type	   = _iTy;
@@ -14,7 +42,14 @@ public:
 	using const_ipointer   = const _iTy*;
 	using size_type		   = isize_t;
 
+	using const_iterator = _iArray_const_iterator<_iTy, _Size>;
+	using iterator		 = _iArray_iterator<_iTy, _Size>;
+
 public:
+	inline iterator begin() noexcept {
+		return iterator(_Elems, 0);
+	}
+
 	inline void swap(size_type _First, size_type _Second) {
 		if (_Pos < 0 || _Pos >= _Size) i_ran();
 
@@ -88,6 +123,7 @@ public:
 	}
 
 	_iTy _Elems[_Size];
+
 private:
 	[[noreturn]] static void i_ran() {
 		throw IRIS::not_in_range("Specified index is out of range");
