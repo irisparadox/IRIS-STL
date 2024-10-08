@@ -1,6 +1,5 @@
 #ifndef _IMACROS_
 #define _IMACROS_
-#include <iexceptions>
 
 #define _IRIS_BEGIN \
 	namespace IRIS {

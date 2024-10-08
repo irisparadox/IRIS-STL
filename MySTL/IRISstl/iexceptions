@@ -1,7 +1,8 @@
 #ifndef _IEXCEPTIONS_
 #define _IEXCEPTIONS_
+#include <imacros>
 
-namespace IRIS {
+_IRIS_BEGIN
 class not_in_range {
 public:
 	not_in_range() {
@@ -24,5 +25,5 @@ public:
 private:
 	char* _Mymsg;
 };
-}
+_IRIS_END
 #endif // _IEXCEPTIONS_

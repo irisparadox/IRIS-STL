@@ -1,6 +1,7 @@
 #ifndef _IARRAY_
 #define _IARRAY_
 #include <imacros>
+#include <iexceptions>
 
 _IRIS_BEGIN
 template <typename T, isize_t _Size>
@@ -13,6 +14,15 @@ public:
 	using size_type		   = isize_t;
 
 public:
+	inline void swap(size_type _First, size_type _Second) {
+		if ((_First < 0 || _First >= _Size) || (_Second < 0 || _Second >= _Size))
+			throw IRIS::not_in_range("Specified indices are out of range");
+
+		T temp = _Elems[_First];
+		_Elems[_First] = _Elems[_Second];
+		_Elems[_Second] = temp;
+	}
+
 	constexpr size_type size() const noexcept {
 		return _Size;
 	}
@@ -83,7 +93,6 @@ public:
 
 private:
 	T _Elems[_Size];
-
 };
 _IRIS_END
 #endif // _IARRAY_
