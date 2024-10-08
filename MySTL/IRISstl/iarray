@@ -24,7 +24,7 @@ public:
 		return _Ptr + _Idx;
 	}
 
-	inline ireference operator++() noexcept {
+	inline _iArray_const_iterator& operator++() noexcept {
 		if (_Size <= _Idx) iiterator_ran();
 		++_Idx;
 		return *this;
@@ -37,7 +37,7 @@ public:
 		return _Copy;
 	}
 
-	inline ireference operator--() noexcept {
+	inline _iArray_const_iterator& operator--() noexcept {
 		if (_Size <= _Idx) iiterator_ran();
 		--_Idx;
 		return *this;
@@ -79,11 +79,11 @@ private:
 	isize_t _Idx;
 
 private:
-	[[noreturn]] void iiterator_ran() {
+	[[noreturn]] static void iiterator_ran() {
 		throw IRIS::not_in_range("Cannot increment iterator past end");
 	}
 
-	[[noreturn]] void iiterator_zer() {
+	[[noreturn]] static void iiterator_zer() {
 		throw IRIS::not_in_range("Cannot decrement iterator before begin");
 	}
 };
@@ -109,7 +109,7 @@ public:
 		return const_cast<ipointer>(_Baseit::operator->());
 	}
 
-	inline ireference operator++() noexcept {
+	inline _iArray_iterator& operator++() noexcept {
 		_Baseit::operator++();
 		return *this;
 	}
@@ -120,7 +120,7 @@ public:
 		return _Copy;
 	}
 
-	inline ireference operator--() noexcept {
+	inline _iArray_iterator& operator--() noexcept {
 		_Baseit::operator--();
 		return *this;
 	}
@@ -131,15 +131,25 @@ public:
 		return _Copy;
 	}
 
+#if _REVISED_
+	inline bool operator==(const _iArray_iterator& _Right) const noexcept {
+		return _Baseit::operator==(_Right);
+	}
+
+	inline bool operator!=(const _iArray_iterator& _Right) const noexcept {
+		return _Baseit::operator!=(_Right);
+	}
+#endif
+
 	inline _iArray_iterator operator+(const ioffset_t _Off) const noexcept {
 		_iArray_iterator _Copy = *this;
-		_Copy += _off;
+		_Copy += _Off;
 		return _Copy;
 	}
 
 	inline _iArray_iterator operator-(const ioffset_t _Off) const noexcept {
 		_iArray_iterator _Copy = *this;
-		_Copy -= _off;
+		_Copy -= _Off;
 		return _Copy;
 	}
 
@@ -179,7 +189,7 @@ public:
 	}
 
 	inline void swap(size_type _First, size_type _Second) {
-		if (_Pos < 0 || _Pos >= _Size) i_ran();
+		if ((_First < 0 || _First >= _Size) || (_Second < 0 || _Second >= _Size)) i_ran();
 
 		value_type temp = _Elems[_First];
 		_Elems[_First] = _Elems[_Second];
