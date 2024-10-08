@@ -1,0 +1,28 @@
+#ifndef _IEXCEPTIONS_
+#define _IEXCEPTIONS_
+
+namespace IRIS {
+class not_in_range {
+public:
+	not_in_range() {
+		_Mymsg = nullptr;
+	}
+	not_in_range(const char* _Msg) {
+		unsigned __int64 length = strlen(_Msg);
+		_Mymsg = new char[length + 1];
+		strcpy(_Mymsg, _Msg);
+	}
+
+	~not_in_range() {
+		delete[] _Mymsg;
+	}
+
+	const char* what() const {
+		return _Mymsg ? _Mymsg : "unknown range error";
+	}
+
+private:
+	char* _Mymsg;
+};
+}
+#endif // _IEXCEPTIONS_

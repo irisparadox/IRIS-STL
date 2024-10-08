@@ -1,0 +1,12 @@
+#ifndef _IMACROS_
+#define _IMACROS_
+#include <iexceptions>
+
+#define _IRIS_BEGIN \
+	namespace IRIS {
+#define _IRIS_END \
+	}
+
+typedef unsigned __int64 isize_t;
+
+#endif // _IMACROS_
