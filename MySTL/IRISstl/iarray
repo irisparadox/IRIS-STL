@@ -4,21 +4,21 @@
 #include <iexceptions>
 
 _IRIS_BEGIN
-template <typename T, isize_t _Size>
+template <class _iTy, isize_t _Size>
 class iarray {
 public:
-	using ireference	   = T&;
-	using const_ireference = const T&;
-	using ipointer		   = T*;
-	using const_ipointer   = const T*;
+	using value_type	   = _iTy;
+	using ireference	   = _iTy&;
+	using const_ireference = const _iTy&;
+	using ipointer		   = _iTy*;
+	using const_ipointer   = const _iTy*;
 	using size_type		   = isize_t;
 
 public:
 	inline void swap(size_type _First, size_type _Second) {
-		if ((_First < 0 || _First >= _Size) || (_Second < 0 || _Second >= _Size))
-			throw IRIS::not_in_range("Specified indices are out of range");
+		if (_Pos < 0 || _Pos >= _Size) i_ran();
 
-		T temp = _Elems[_First];
+		value_type temp = _Elems[_First];
 		_Elems[_First] = _Elems[_Second];
 		_Elems[_Second] = temp;
 	}
@@ -34,8 +34,7 @@ public:
 	inline ireference at(size_type _Pos) {
 		static_assert(_Size > 0, "Evaluating empty array");
 
-		if (_Pos < 0 || _Pos >= _Size)
-			throw IRIS::not_in_range("Specified index is out of range");
+		if (_Pos < 0 || _Pos >= _Size) i_ran();
 
 		return _Elems[_Pos];
 	}
@@ -43,8 +42,7 @@ public:
 	constexpr const_ireference at(size_type _Pos) const {
 		static_assert(_Size > 0, "Evaluating empty array");
 
-		if (_Pos < 0 || _Pos >= _Size)
-			throw IRIS::not_in_range("Specified index is out of range");
+		if (_Pos < 0 || _Pos >= _Size) i_ran();
 
 		return _Elems[_Pos];
 	}
@@ -52,8 +50,7 @@ public:
 	inline ireference operator[](size_type _Pos) {
 		static_assert(_Size > 0, "Evaluating empty array");
 
-		if (_Pos < 0 || _Pos >= _Size)
-			throw IRIS::not_in_range("Specified index is out of range");
+		if (_Pos < 0 || _Pos >= _Size) i_ran();
 
 		return _Elems[_Pos];
 	}
@@ -61,8 +58,7 @@ public:
 	constexpr const_ireference operator[](size_type _Pos) const {
 		static_assert(_Size > 0, "Evaluating empty array");
 
-		if (_Pos < 0 || _Pos >= _Size)
-			throw IRIS::not_in_range("Specified index is out of range");
+		if (_Pos < 0 || _Pos >= _Size) i_ran();
 
 		return _Elems[_Pos];
 	}
@@ -91,8 +87,11 @@ public:
 		return _Elems;
 	}
 
+	_iTy _Elems[_Size];
 private:
-	T _Elems[_Size];
+	[[noreturn]] static void i_ran() {
+		throw IRIS::not_in_range("Specified index is out of range");
+	}
 };
 _IRIS_END
 #endif // _IARRAY_
