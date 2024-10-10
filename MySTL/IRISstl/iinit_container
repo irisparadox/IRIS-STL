@@ -1,0 +1,45 @@
+#ifndef _IINIT_CONTAINER_
+#define _IINIT_CONTAINER_
+#include <imacros>
+
+_IRIS_BEGIN
+template <class _Val>
+class iinit_container {
+public:
+	using value_type	  = _Val;
+	using reference		  = _Val&;
+	using const_reference = const _Val&;
+	using size_type		  = isize_t;
+
+	constexpr iinit_container() noexcept : _First(nullptr), _Last(nullptr) {}
+	constexpr iinit_container(const _Val* _firstArg, const _Val* _lastArg) noexcept
+		: _First(_firstArg), _Last(_lastArg) {}
+
+	constexpr const _Val* begin() const noexcept {
+		return _First;
+	}
+
+	constexpr const _Val* end() const noexcept {
+		return _Last;
+	}
+
+	constexpr size_type size() const noexcept {
+		return static_cast<size_type>(_Last - _First);
+	}
+
+private:
+	const _Val* _First;
+	const _Val* _Last;
+};
+
+template <class _Val>
+constexpr const _Val* begin(iinit_container<_Val> _iCont) noexcept {
+	return _iCont.begin();
+}
+
+template <class _Val>
+constexpr const _Val* end(iinit_container<_Val> _iCont) noexcept {
+	return _iCont.end();
+}
+_IRIS_END
+#endif // _IINITCONTAINER_

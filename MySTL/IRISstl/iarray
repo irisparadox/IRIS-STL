@@ -260,12 +260,13 @@ public:
 		return _Elems;
 	}
 
-	_iTy _Elems[_Size];
-
 private:
 	[[noreturn]] static void i_ran() {
 		throw IRIS::not_in_range("Specified index is out of range");
 	}
+
+public:
+	_iTy _Elems[_Size];
 };
 _IRIS_END
 #endif // _IARRAY_

@@ -1,0 +1,33 @@
+#ifndef _IVECTOR_
+#define _IVECTOR
+#include <imacros>
+#include <iexceptions>
+
+_IRIS_BEGIN
+template <class _iTy>
+class vector_container {
+public:
+	using pointer		  = _iTy*;
+	using const_pointer	  = const _iTy*;
+	using reference		  = _iTy&;
+	using const_reference = const _iTy&;
+	using size_type		  = isize_t;
+
+	inline vector_container() noexcept : _First(), _Last(), _End() {}
+
+	inline vector_container(pointer _first, pointer _last, pointer _end) : _First(_first), _Last(_last), _End(_end) {}
+
+	pointer _First;
+	pointer _Last;
+	pointer _End;
+};
+
+template <class _iTy>
+class ivector {
+public:
+
+private:
+	vector_container<_iTy> _Elems;
+};
+_IRIS_END
+#endif // _IVECTOR_

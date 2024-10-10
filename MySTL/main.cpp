@@ -1,16 +1,12 @@
 #include <iarray>
 #include <iostream>
+#include <vector>
+#include <ivector>
 
 int main() {
-	IRIS::iarray<int, 5> arr = { 1, 2, 3, 4, 5 };
+	std::vector<int> stdvec;
 
-	for (auto& val : arr) {
-		val *= 4;
-	}
-
-	for (auto& val : arr) {
-		std::cout << val << '\n';
-	}
+	stdvec.push_back(1);
 
 	return 0;
 }
