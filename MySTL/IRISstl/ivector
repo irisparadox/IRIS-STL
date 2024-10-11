@@ -25,8 +25,62 @@ public:
 template <class _iTy>
 class ivector {
 public:
+	using value_type	  = _iTy;
+	using pointer		  = _iTy*;
+	using const_pointer	  = const _iTy*;
+	using reference		  = _iTy&;
+	using const_reference = const _iTy&;
+	using size_type		  = isize_t;
+
+	inline ivector() : _Elems() {}
+
+public:
+	inline size_type size() const noexcept {
+		return static_cast<size_type>(_Elems._Last - _Elems._First);
+	}
+
+	inline size_type capacity() const noexcept {
+		return static_cast<size_type>(_Elems._End - _Elems._First);
+	}
+
+	inline void push_back(const value_type& _Val) {
+		if (_Elems._Last == _Elems._End) {
+			size_type _Capacity = _New_capacity();
+			_Alloc(_Capacity);
+		}
+
+		_Emplace_back(_Val);
+	}
 
 private:
+	inline void _Alloc(size_type _Capacity) noexcept {
+		size_type _Size = size();
+		pointer _Myfirst = new value_type[_Capacity];
+
+		if (_Elems._First != nullptr) {
+			for (size_type i = 0; i < _Size; ++i) {
+				_Myfirst[i] = _Elems._First[i];
+			}
+
+			delete[] _Elems._First;
+		}
+
+		_Elems._First = _Myfirst;
+		_Elems._Last  = _Myfirst + _Size;
+		_Elems._End	  = _Myfirst + _Capacity;
+	}
+
+	inline void _Emplace_back(const value_type& _Val) {
+		new (_Elems._Last) value_type(_Val);
+		++_Elems._Last;
+	}
+
+	inline size_type _New_capacity() const {
+		size_type _Current = static_cast<size_type>(_Elems._End - _Elems._First);
+		size_type _New = _Current > 0 ? _Current + (_Current + 1) / 2 : 1;
+		return _New;
+	}
+
 	vector_container<_iTy> _Elems;
 };
 _IRIS_END
