@@ -5,6 +5,32 @@
 
 _IRIS_BEGIN
 template <class _iTy>
+class _iVector_const_iterator {
+public:
+	using value_type	  = _iTy;
+	using const_pointer   = const _iTy*;
+	using const_reference = const _iTy&;
+	using size_type		  = isize_t;
+	using offset_type	  = ioffset_t;
+
+	inline _iVector_const_iterator() noexcept : _Ptr(), _Idx(0) {}
+	inline explicit _iVector_const_iterator(const_pointer _Pvec, size_type _Off = 0) noexcept : _Ptr(_Pvec), _Idx(_Off) {}
+
+public:
+	inline const_reference operator*() const noexcept {
+		return *operator->();
+	}
+
+	inline const_reference operator->() const noexcept {
+		return _Ptr + _Idx;
+	}
+
+private:
+	const_pointer _Ptr;
+	size_type _Idx;
+};
+
+template <class _iTy>
 class vector_container {
 public:
 	using pointer		  = _iTy*;
@@ -28,11 +54,26 @@ public:
 	using value_type	  = _iTy;
 	using pointer		  = _iTy*;
 	using const_pointer	  = const _iTy*;
-	using reference		  = _iTy&;
+	using reference       = _iTy&;
 	using const_reference = const _iTy&;
 	using size_type		  = isize_t;
 
+	using const_iterator = _iVector_const_iterator;
+
 	inline ivector() : _Elems() {}
+
+	inline ~ivector() {
+		_Dealloc();
+	}
+
+public:
+	inline const_iterator cbegin() noexcept {
+		return const_iterator(_Elems._First, 0);
+	}
+
+	inline const_iterator cend() noexcept {
+		return const_iterator(_Elems._Last, size());
+	}
 
 public:
 	inline size_type size() const noexcept {
@@ -43,6 +84,18 @@ public:
 		return static_cast<size_type>(_Elems._End - _Elems._First);
 	}
 
+	inline bool empty() const noexcept {
+	return _Elems._First == _Elems._Last;
+	}
+
+	inline value_type front() const noexcept {
+		return *_Elems._First;
+	}
+
+	inline value_type back() const noexcept {
+		return *(_Elems._Last - 1);
+	}
+
 	inline void push_back(const value_type& _Val) {
 		if (_Elems._Last == _Elems._End) {
 			size_type _Capacity = _New_capacity();
@@ -51,6 +104,17 @@ public:
 
 		_Emplace_back(_Val);
 	}
+
+    inline void pop_back() {
+        if(_Elems._Last != _Elems._First) {
+            --_Elems._Last;
+            _Elems._Last->~_iTy();
+        }
+    }
+
+    inline void reserve(size_type _Capacity) noexcept {
+        _Alloc(_Capacity + capacity());
+    }
 
 private:
 	inline void _Alloc(size_type _Capacity) noexcept {
@@ -68,6 +132,13 @@ private:
 		_Elems._First = _Myfirst;
 		_Elems._Last  = _Myfirst + _Size;
 		_Elems._End	  = _Myfirst + _Capacity;
+	}
+
+	inline void _Dealloc() noexcept {
+		delete[] _Elems._First;
+		_Elems._First = nullptr;
+		_Elems._Last  = nullptr;
+		_Elems._End   = nullptr;
 	}
 
 	inline void _Emplace_back(const value_type& _Val) {
