@@ -269,10 +269,12 @@ public:
 	}
 
 	inline value_type front() const noexcept {
+		if (size() <= 0) empty_vector();
 		return *_Elems._First;
 	}
 
 	inline value_type back() const noexcept {
+		if (size() <= 0) empty_vector();
 		return *(_Elems._Last - 1);
 	}
 
@@ -295,6 +297,16 @@ public:
     inline void reserve(size_type _Capacity) noexcept {
         _Alloc(_Capacity + capacity());
     }
+
+	inline void clear() noexcept {
+		if (_Elems._First != nullptr) {
+			for (pointer _Ptr = _Elems._First; _Ptr != _Elems._Last; ++_Ptr) {
+				_Ptr->~_iTy();
+			}
+
+			_Elems._Last = _Elems._First;
+		}
+	}
 
 public:
 	inline iterator insert(iterator _Idx, const value_type& _Val) {
@@ -337,8 +349,8 @@ private:
 		pointer _Myfirst = new value_type[_Capacity];
 
 		if (_Elems._First != nullptr) {
-			for (size_type i = 0; i < _Size; ++i) {
-				_Myfirst[i] = _Elems._First[i];
+			for (offset_type i = 0; i < _Size; ++i) {
+				*(_Myfirst + i) = *(_Elems._First + i);
 			}
 
 			delete[] _Elems._First;
@@ -383,6 +395,10 @@ private:
 
 	[[noreturn]] static void invalid_iterator() {
 		throw IRIS::not_in_range("Specified iterator is out of range");
+	}
+
+	[[noreturn]] static void empty_vector() {
+		throw IRIS::empty_container("Vector is empty");
 	}
 };
 _IRIS_END

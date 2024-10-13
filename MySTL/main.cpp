@@ -36,7 +36,10 @@ int main() {
 	std::cout << vec.front() << '\n';
 	std::cout << vec.back() << '\n';
 
+	vec.clear();
+
 	std::cout << vec.capacity() << '\n';
+	std::cout << vec.size() << '\n';
 		
 	return 0;
 }
