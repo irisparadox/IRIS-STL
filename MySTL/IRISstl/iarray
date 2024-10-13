@@ -20,30 +20,29 @@ public:
 	}
 
 	inline ipointer operator->() const noexcept {
-		if (_Size <= _Idx) iiterator_ran();
 		return _Ptr + _Idx;
 	}
 
-	inline _iArray_const_iterator& operator++() noexcept {
+	inline _iArray_const_iterator& operator++() {
 		if (_Size <= _Idx) iiterator_ran();
 		++_Idx;
 		return *this;
 	}
 
-	inline _iArray_const_iterator operator++(int) noexcept {
+	inline _iArray_const_iterator operator++(int) {
 		if (_Size <= _Idx) iiterator_ran();
 		_iArray_const_iterator _Copy = *this;
 		++*this;
 		return _Copy;
 	}
 
-	inline _iArray_const_iterator& operator--() noexcept {
+	inline _iArray_const_iterator& operator--() {
 		if (_Size <= _Idx) iiterator_ran();
 		--_Idx;
 		return *this;
 	}
 
-	inline _iArray_const_iterator operator--(int) noexcept {
+	inline _iArray_const_iterator operator--(int) {
 		if (_Idx <= 0) iiterator_zer();
 		_iArray_const_iterator _Copy = *this;
 		--*this;

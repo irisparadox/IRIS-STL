@@ -14,20 +14,105 @@ public:
 	using offset_type	  = ioffset_t;
 
 	inline _iVector_const_iterator() noexcept : _Ptr(), _Idx(0) {}
-	inline explicit _iVector_const_iterator(const_pointer _Pvec, size_type _Off = 0) noexcept : _Ptr(_Pvec), _Idx(_Off) {}
+	inline explicit _iVector_const_iterator(const_pointer _Pvec, offset_type _Off = 0) noexcept : _Ptr(_Pvec), _Idx(_Off) {}
 
 public:
 	inline const_reference operator*() const noexcept {
 		return *operator->();
 	}
 
-	inline const_reference operator->() const noexcept {
+	inline const_pointer operator->() const noexcept {
 		return _Ptr + _Idx;
+	}
+
+	inline _iVector_const_iterator& operator++() noexcept {
+		++_Idx;
+		return *this;
+	}
+
+	inline _iVector_const_iterator operator++(int) noexcept {
+		_iVector_const_iterator _Copy = *this;
+		++*this;
+		return _Copy;
+	}
+
+	inline _iVector_const_iterator& operator--() noexcept {
+		--_Idx;
+		return *this;
+	}
+
+	inline _iVector_const_iterator operator--(int) noexcept {
+		_iVector_const_iterator _Copy = *this;
+		--*this;
+		return _Copy;
+	}
+
+	inline bool operator==(const _iVector_const_iterator& _Right) const noexcept {
+		return _Idx == _Right._Idx;
+	}
+
+	inline bool operator!=(const _iVector_const_iterator& _Right) const noexcept {
+		return _Idx != _Right._Idx;
+	}
+
+private:
+	[[noreturn]] static void iiterator_ran() {
+		throw IRIS::not_in_range("Cannot increment iterator past end");
+	}
+
+	[[noreturn]] static void iiterator_zer() {
+		throw IRIS::not_in_range("Cannot decrement iterator before begin");
 	}
 
 private:
 	const_pointer _Ptr;
-	size_type _Idx;
+	offset_type _Idx;
+};
+
+template<class _iTy>
+class _iVector_iterator : public _iVector_const_iterator<_iTy> {
+public:
+	using _Baseit = _iVector_const_iterator<_iTy>;
+
+	using value_type  = _iTy;
+	using pointer     = _iTy*;
+	using reference   = _iTy&;
+	using size_type   = isize_t;
+	using offset_type = ioffset_t;
+
+	inline _iVector_iterator() noexcept {}
+	inline explicit _iVector_iterator(pointer _Parr, offset_type _Off = 0) noexcept : _Baseit(_Parr, _Off) {}
+
+public:
+	inline reference operator*() const noexcept {
+		return const_cast<reference>(_Baseit::operator*());
+	}
+
+	inline reference operator->() const noexcept {
+		return const_cast<reference>(_Baseit::operator->());
+	}
+
+	inline _iVector_iterator& operator++() noexcept {
+		_Baseit::operator++();
+		return *this;
+	}
+
+	inline _iVector_iterator operator++(int) noexcept {
+		_iVector_iterator _Copy = *this;
+		_Baseit::operator++();
+		return _Copy;
+	}
+
+	inline _iVector_iterator& operator--() noexcept {
+		_Baseit::operator--();
+		return *this;
+	}
+
+	inline _iVector_iterator operator--(int) noexcept {
+		_iVector_iterator _Copy = *this;
+		_Baseit::operator--();
+		return _Copy;
+	}
 };
 
 template <class _iTy>
@@ -58,15 +143,29 @@ public:
 	using const_reference = const _iTy&;
 	using size_type		  = isize_t;
 
-	using const_iterator = _iVector_const_iterator;
+	using const_iterator = _iVector_const_iterator<_iTy>;
+	using iterator		 = _iVector_iterator<_iTy>;
 
 	inline ivector() : _Elems() {}
+
+	template <class... _iTy>
+	inline ivector(_iTy&&... _Vec) : _Elems() {
+		_initialize_with_variadic(static_cast<_iTy&&>(_Vec)...);
+	}
 
 	inline ~ivector() {
 		_Dealloc();
 	}
 
 public:
+	inline iterator begin() noexcept {
+		return iterator(_Elems._First, 0);
+	}
+
+	inline iterator end() noexcept {
+		return iterator(_Elems._Last, size());
+	}
+
 	inline const_iterator cbegin() noexcept {
 		return const_iterator(_Elems._First, 0);
 	}
@@ -116,6 +215,19 @@ public:
         _Alloc(_Capacity + capacity());
     }
 
+public:
+	inline reference operator[](size_type _Pos) {
+		if (_Pos < 0 || _Pos >= size()) i_ran();
+
+		return *(_Elems._First + _Pos);
+	}
+
+	inline const_reference operator[](size_type _Pos) const {
+		if (_Pos < 0 || _Pos >= size()) i_ran();
+
+		return *(_Elems._First + _Pos);
+	}
+
 private:
 	inline void _Alloc(size_type _Capacity) noexcept {
 		size_type _Size = size();
@@ -141,6 +253,13 @@ private:
 		_Elems._End   = nullptr;
 	}
 
+	template <class... _iTy>
+	inline void _initialize_with_variadic(_iTy&&... _Vec) {
+		size_type _Size = sizeof...(_Vec);
+		_Alloc(_Size);
+		((*_Elems._Last++ = static_cast<_iTy&&>(_Vec)), ...);
+	}
+
 	inline void _Emplace_back(const value_type& _Val) {
 		new (_Elems._Last) value_type(_Val);
 		++_Elems._Last;
@@ -153,6 +272,11 @@ private:
 	}
 
 	vector_container<_iTy> _Elems;
+
+private:
+	[[noreturn]] static void i_ran() {
+		throw IRIS::not_in_range("Specified index is out of range");
+	}
 };
 _IRIS_END
 #endif // _IVECTOR_
