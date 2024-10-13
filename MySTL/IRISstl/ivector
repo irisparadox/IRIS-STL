@@ -278,6 +278,24 @@ public:
 		return *(_Elems._Last - 1);
 	}
 
+	inline pointer data() noexcept {
+		return _Elems._First;
+	}
+
+	inline const_pointer data() const noexcept {
+		return _Elems._First;
+	}
+
+	inline reference at(offset_type _Pos) {
+		if (_Pos < 0 || _Pos >= size()) i_ran();
+		return *(_Elems._First + _Pos);
+	}
+
+	constexpr const_reference at(offset_type _Pos) const {
+		if (_Pos < 0 || _Pos >= size()) i_ran();
+		return *(_Elems._First + _Pos);
+	}
+
 	inline void push_back(const value_type& _Val) {
 		if (_Elems._Last == _Elems._End) {
 			size_type _Capacity = _New_capacity();
