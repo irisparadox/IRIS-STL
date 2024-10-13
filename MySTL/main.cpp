@@ -19,7 +19,19 @@ int main() {
 		std::cout << val;
 	}
 
+	IRIS::ivector<int>::iterator it = vec.begin();
+
+	unsigned int i = 0;
+	while (it != vec.end()) {
+		if (i == 3)
+			it = vec.insert(it, 87);
+		++it;
+		++i;
+	}
+
 	std::cout << '\n';
+
+	std::cout << vec[3] << '\n';
 
 	std::cout << vec.front() << '\n';
 	std::cout << vec.back() << '\n';
