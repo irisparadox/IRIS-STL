@@ -269,12 +269,12 @@ public:
 	}
 
 	inline value_type front() const noexcept {
-		if (size() <= 0) empty_vector();
+		if (empty()) empty_vector();
 		return *_Elems._First;
 	}
 
 	inline value_type back() const noexcept {
-		if (size() <= 0) empty_vector();
+		if (empty()) empty_vector();
 		return *(_Elems._Last - 1);
 	}
 
@@ -367,7 +367,7 @@ private:
 		pointer _Myfirst = new value_type[_Capacity];
 
 		if (_Elems._First != nullptr) {
-			for (offset_type i = 0; i < _Size; ++i) {
+			for (size_type i = 0; i < _Size; ++i) {
 				*(_Myfirst + i) = *(_Elems._First + i);
 			}
 

@@ -31,7 +31,13 @@ private:
 	char _Mymsg[_Max_size];
 };
 
-class not_in_range	  : public exception {};
-class empty_container : public exception {};
+class not_in_range	  : public exception {
+public:
+	not_in_range(const char* _Msg)	  : exception(_Msg) {}
+};
+class empty_container : public exception {
+public:
+	empty_container(const char* _Msg) : exception(_Msg) {}
+};
 _IRIS_END
 #endif // _IEXCEPTIONS_
