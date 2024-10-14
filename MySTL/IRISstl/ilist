@@ -65,19 +65,50 @@ public:
 	}
 
 public:
+	_IRIS_CXX17_CONSTEXPR bool empty() _IRIS_CONSEXCEPT {
+		return (_Head->_Next == _Head && _Head->_Prev == _Head);
+	}
+
+	_IRIS_CXX17_CONSTEXPR void push_front(const value_type& _Val) {
+		_Nodeptr _newnode = _Allocate<_Node>(1);
+
+		_Construct_placed(_newnode->_Val, _Val);
+		_Emplace_node_at_front(_newnode);
+	}
+
 	_IRIS_CXX17_CONSTEXPR void push_back(const value_type& _Val) {
 		_Nodeptr _newnode = _Allocate<_Node>(1);
 
 		_Construct_placed(_newnode->_Val, _Val);
-		_Emplace_node(_newnode);
+		_Emplace_node_at_back(_newnode);
 	}
 
 private:
-	_IRIS_CXX17_CONSTEXPR void _Emplace_node(_Nodeptr _Ptr) {
-		_Ptr->_Prev			= _Head->_Prev;
-		_Ptr->_Next			= _Head;
-		_Head->_Prev->_Next = _Ptr;
-		_Head->_Prev		= _Ptr;
+	_IRIS_CXX17_CONSTEXPR void _Emplace_empty(_Nodeptr _Ptr) {
+		_Head->_Next = _Ptr;
+		_Head->_Prev = _Ptr;
+		_Ptr->_Next = _Head;
+		_Ptr->_Prev = _Head;
+	}
+
+	_IRIS_CXX17_CONSTEXPR void _Emplace_node_at_front(_Nodeptr _Ptr) {
+		if (empty()) _Emplace_empty(_Ptr);
+		else {
+			_Ptr->_Prev = _Head;
+			_Ptr->_Next = _Head->_Next;
+			_Head->_Next->_Prev = _Ptr;
+			_Head->_Next = _Ptr;
+		}
+	}
+
+	_IRIS_CXX17_CONSTEXPR void _Emplace_node_at_back(_Nodeptr _Ptr) {
+		if (empty()) _Emplace_empty(_Ptr);
+		else {
+			_Ptr->_Prev			= _Head->_Prev;
+			_Ptr->_Next			= _Head;
+			_Head->_Prev->_Next = _Ptr;
+			_Head->_Prev		= _Ptr;
+		}
 	}
 
 private:

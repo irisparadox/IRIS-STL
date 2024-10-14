@@ -10,6 +10,9 @@ int main() {
 	IRIS::ilist<int> list;
 
 	list.push_back(5);
+	list.push_front(10);
+
+	while (1);
 
 	/*IRIS::ivector<int> vec = {1, 2, 3};
 	vec.push_back(1);
