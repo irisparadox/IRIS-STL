@@ -18,6 +18,7 @@ struct _Node {
 	_Node& operator=(const _Node&) = delete;
 
 	static _Nodeptr _Reheadnode() {
+		// buy a block of heap and then point towards head
 		const auto _Head = _Allocate<_Node>(1);
 		_Construct_placed(_Head->_Next, _Head);
 		_Construct_placed(_Head->_Prev, _Head);
@@ -31,8 +32,19 @@ struct _Node {
 	}
 
 	static void _Freenode(_Nodeptr _Ptr) noexcept {
+		// desttoy node and then free children
 		_Destroy<_Node>(_Ptr);
 		_Freenode0(_Ptr);
+	}
+
+	static void _Free_non_head(_Nodeptr _Head) noexcept { // iterates through list and frees all nodes
+		// disconnect head from list
+		_Head->_Prev->_Next = nullptr;
+		auto _PtrNode = _Head->_Next;
+		for (_Nodeptr _PtrNext; _PtrNode; _PtrNode = _PtrNext) {
+			_PtrNext = _PtrNode->_Next;
+			_Freenode(_PtrNode);
+		}
 	}
 };
 
@@ -44,6 +56,32 @@ public:
 	using const_pointer	  = const _iTy*;
 	using reference		  = _iTy&;
 	using const_reference = const _iTy&;
+
+	using _Node = _Node<value_type>;
+	using _Nodeptr = typename _Node::_Nodeptr;
+
+	_IRIS_CXX17_CONSTEXPR ilist() noexcept {
+		_Head = _Node::_Reheadnode();
+	}
+
+public:
+	_IRIS_CXX17_CONSTEXPR void push_back(const value_type& _Val) {
+		_Nodeptr _newnode = _Allocate<_Node>(1);
+
+		_Construct_placed(_newnode->_Val, _Val);
+		_Emplace_node(_newnode);
+	}
+
+private:
+	_IRIS_CXX17_CONSTEXPR void _Emplace_node(_Nodeptr _Ptr) {
+		_Ptr->_Prev			= _Head->_Prev;
+		_Ptr->_Next			= _Head;
+		_Head->_Prev->_Next = _Ptr;
+		_Head->_Prev		= _Ptr;
+	}
+
+private:
+	_Nodeptr _Head; // pointer to head node
 };
 _IRIS_END
 #endif // _ILIST_

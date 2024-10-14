@@ -6,7 +6,12 @@
 #include <ilist>
 
 int main() {
-	IRIS::ivector<int> vec = { 1, 2, 3 };
+
+	IRIS::ilist<int> list;
+
+	list.push_back(5);
+
+	/*IRIS::ivector<int> vec = {1, 2, 3};
 	vec.push_back(1);
 	vec.push_back(2);
 	vec.push_back(3);
@@ -53,7 +58,7 @@ int main() {
 
 	it = vec1.erase(it);
 	
-	if (vec1 == vec2) std::cout << "Yes\n";
+	if (vec1 == vec2) std::cout << "Yes\n";*/
 	
 	return 0;
 }

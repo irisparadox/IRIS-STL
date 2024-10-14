@@ -1,7 +1,7 @@
 #ifndef _IMEMORY_
 #define _IMEMORY_
 #include <itype_traits>
-#include <imacros>s
+#include <imacros>
 
 _IRIS_BEGIN
 template <class _iTy, class... _Types>
@@ -34,7 +34,6 @@ template <class _iTy>
 _IRIS_CXX17_CONSTEXPR void _Destroy(_iTy* _Ptr) noexcept {
 	if (_Ptr) {
 		_Destroy_placed(_Ptr->_Myval);
-		delete _Ptr;
 	}
 }
 _IRIS_END
