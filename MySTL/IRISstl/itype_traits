@@ -1,0 +1,35 @@
+#ifndef _ITYPE_TRAITS_
+#define _ITYPE_TRAITS_
+#include <imacros>
+
+_IRIS_BEGIN
+template <class _iTy>
+struct remove_reference {
+	using type			 = _iTy;
+	using const_thru_ref = const _iTy;
+};
+
+template <class _iTy>
+struct remove_reference<_iTy&> {
+	using type			 = _iTy;
+	using const_thru_ref = const _iTy&;
+};
+
+template <class _iTy>
+struct remove_reference<_iTy&&> {
+	using type			 = _iTy;
+	using const_thru_ref = const _iTy&&;
+};
+
+template <class _iTy>
+using remove_ref_t = typename remove_reference<_iTy>::type;
+
+template <class _iTy>
+using remove_const_thru_ref_t = typename remove_reference<_iTy>::const_thru_ref;
+
+template <class _iTy>
+constexpr _iTy&& forward(remove_ref_t<_iTy>& _Arg) noexcept {
+	return static_cast<_iTy&&>(_Arg);
+}
+_IRIS_END
+#endif // _ITYPE_TRAITS_

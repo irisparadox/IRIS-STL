@@ -13,95 +13,95 @@ public:
 	using size_type		  = isize_t;
 	using offset_type	  = ioffset_t;
 
-	inline _iVector_const_iterator() noexcept : _Ptr(), _Idx(0) {}
-	inline explicit _iVector_const_iterator(const_pointer _Pvec, offset_type _Off = 0) noexcept : _Ptr(_Pvec), _Idx(_Off) {}
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator() noexcept : _Ptr(), _Idx(0) {}
+	_IRIS_CXX20_CONSTEXPR explicit _iVector_const_iterator(const_pointer _Pvec, offset_type _Off = 0) noexcept : _Ptr(_Pvec), _Idx(_Off) {}
 
 public:
-	inline const_reference operator*() const noexcept {
+	_IRIS_CXX20_CONSTEXPR const_reference operator*() _IRIS_CONSEXCEPT {
 		return *operator->();
 	}
 
-	inline const_pointer operator->() const noexcept {
+	_IRIS_CXX20_CONSTEXPR const_pointer operator->() _IRIS_CONSEXCEPT {
 		return _Ptr + _Idx;
 	}
 
-	inline _iVector_const_iterator& operator++() noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator& operator++() noexcept {
 		++_Idx;
 		return *this;
 	}
 
-	inline _iVector_const_iterator operator++(int) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator operator++(int) noexcept {
 		_iVector_const_iterator _Copy = *this;
 		++*this;
 		return _Copy;
 	}
 
-	inline _iVector_const_iterator& operator--() noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator& operator--() noexcept {
 		--_Idx;
 		return *this;
 	}
 
-	inline _iVector_const_iterator operator--(int) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator operator--(int) noexcept {
 		_iVector_const_iterator _Copy = *this;
 		--*this;
 		return _Copy;
 	}
 
-	inline bool operator==(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator==(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx == _Right._Idx;
 	}
 
-	inline bool operator!=(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator!=(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx != _Right._Idx;
 	}
 
-	inline bool operator<(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator<(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx < _Right._Idx;
 	}
 
-	inline bool operator>(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator>(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx > _Right._Idx;
 	}
 
-	inline bool operator<=(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator<=(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx <= _Right._Idx;
 	}
 
-	inline bool operator>=(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator>=(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx >= _Right._Idx;
 	}
 
-	inline _iVector_const_iterator operator+(const offset_type _Off) const noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator operator+(const offset_type _Off) _IRIS_CONSEXCEPT {
 		_iVector_const_iterator _Copy = *this;
 		_Copy._Idx += _Off;
 		return _Copy;
 	}
 
-	inline offset_type operator+(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR offset_type operator+(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx + _Right._Idx;
 	}
 
-	inline _iVector_const_iterator& operator+=(const offset_type _Off) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator& operator+=(const offset_type _Off) noexcept {
 		_Idx += static_cast<size_type>(_Off);
 		return *this;
 	}
 
-	inline _iVector_const_iterator operator-(const offset_type _Off) const noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator operator-(const offset_type _Off) _IRIS_CONSEXCEPT {
 		_iVector_const_iterator _Copy = *this;
 		_Copy._Idx -= _Off;
 		return _Copy;
 	}
 
-	inline offset_type operator-(const _iVector_const_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR offset_type operator-(const _iVector_const_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Idx - _Right._Idx;
 	}
 
-	inline _iVector_const_iterator& operator-=(const offset_type _Off) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_const_iterator& operator-=(const offset_type _Off) noexcept {
 		_Idx -= static_cast<size_type>(_Off);
 		return *this;
 	}
 
-	inline const_reference operator[](const offset_type _Off) const noexcept {
+	_IRIS_CXX20_CONSTEXPR const_reference operator[](const offset_type _Off) _IRIS_CONSEXCEPT {
 		return *(*this + _Off);
 	}
 
@@ -130,87 +130,87 @@ public:
 	using size_type   = isize_t;
 	using offset_type = ioffset_t;
 
-	inline _iVector_iterator() noexcept {}
-	inline explicit _iVector_iterator(pointer _Parr, offset_type _Off = 0) noexcept : _Baseit(_Parr, _Off) {}
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator() noexcept {}
+	_IRIS_CXX20_CONSTEXPR explicit _iVector_iterator(pointer _Parr, offset_type _Off = 0) noexcept : _Baseit(_Parr, _Off) {}
 
 public:
-	inline reference operator*() const noexcept {
+	_IRIS_CXX20_CONSTEXPR reference operator*() _IRIS_CONSEXCEPT {
 		return const_cast<reference>(_Baseit::operator*());
 	}
 
-	inline reference operator->() const noexcept {
+	_IRIS_CXX20_CONSTEXPR reference operator->() _IRIS_CONSEXCEPT {
 		return const_cast<reference>(_Baseit::operator->());
 	}
 
-	inline _iVector_iterator& operator++() noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator& operator++() noexcept {
 		_Baseit::operator++();
 		return *this;
 	}
 
-	inline _iVector_iterator operator++(int) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator operator++(int) noexcept {
 		_iVector_iterator _Copy = *this;
 		_Baseit::operator++();
 		return _Copy;
 	}
 
-	inline _iVector_iterator& operator--() noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator& operator--() noexcept {
 		_Baseit::operator--();
 		return *this;
 	}
 
-	inline _iVector_iterator operator--(int) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator operator--(int) noexcept {
 		_iVector_iterator _Copy = *this;
 		_Baseit::operator--();
 		return _Copy;
 	}
 
-	inline bool operator<(const _iVector_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator<(const _iVector_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Baseit::operator<(_Right);
 	}
 
-	inline bool operator>(const _iVector_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator>(const _iVector_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Baseit::operator>(_Right);
 	}
 
-	inline bool operator<=(const _iVector_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator<=(const _iVector_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Baseit::operator<=(_Right);
 	}
 
-	inline bool operator>=(const _iVector_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool operator>=(const _iVector_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Baseit::operator>=(_Right);
 	}
 
-	inline _iVector_iterator operator+(const offset_type _Off) const noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator operator+(const offset_type _Off) _IRIS_CONSEXCEPT {
 		_iVector_iterator _Copy = *this;
 		_Copy += _Off;
 		return _Copy;
 	}
 
-	inline offset_type operator+(const _iVector_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR offset_type operator+(const _iVector_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Baseit::operator+(_Right);
 	}
 
-	inline _iVector_iterator& operator+=(const offset_type _Off) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator& operator+=(const offset_type _Off) noexcept {
 		_Baseit::operator+=(_Off);
 		return *this;
 	}
 
-	inline _iVector_iterator operator-(const offset_type _Off) const noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator operator-(const offset_type _Off) _IRIS_CONSEXCEPT {
 		_iVector_iterator _Copy = *this;
 		_Copy -= _Off;
 		return _Copy;
 	}
 
-	inline offset_type operator-(const _iVector_iterator& _Right) const noexcept {
+	_IRIS_CXX20_CONSTEXPR offset_type operator-(const _iVector_iterator& _Right) _IRIS_CONSEXCEPT {
 		return _Baseit::operator-(_Right);
 	}
 
-	inline _iVector_iterator& operator-=(const offset_type _Off) noexcept {
+	_IRIS_CXX20_CONSTEXPR _iVector_iterator& operator-=(const offset_type _Off) noexcept {
 		_Baseit::operator-=(_Off);
 		return *this;
 	}
 
-	inline reference operator[](const offset_type _Off) const noexcept {
+	_IRIS_CXX20_CONSTEXPR reference operator[](const offset_type _Off) _IRIS_CONSEXCEPT {
 		return const_cast<reference>(_Baseit::operator[](_Off));
 	}
 };
@@ -224,9 +224,9 @@ public:
 	using const_reference = const _iTy&;
 	using size_type		  = isize_t;
 
-	inline vector_container() noexcept : _First(), _Last(), _End() {}
+	_IRIS_CXX20_CONSTEXPR vector_container() noexcept : _First(), _Last(), _End() {}
 
-	inline vector_container(pointer _first, pointer _last, pointer _end) : _First(_first), _Last(_last), _End(_end) {}
+	_IRIS_CXX20_CONSTEXPR vector_container(pointer _first, pointer _last, pointer _end) : _First(_first), _Last(_last), _End(_end) {}
 
 	pointer _First;
 	pointer _Last;
@@ -247,66 +247,66 @@ public:
 	using const_iterator = _iVector_const_iterator<_iTy>;
 	using iterator		 = _iVector_iterator<_iTy>;
 
-	inline ivector() : _Elems() {}
+	_IRIS_CXX20_CONSTEXPR ivector() : _Elems() {}
 
 	template <class... _iTy>
-	inline ivector(_iTy&&... _Vec) : _Elems() {
+	_IRIS_CXX20_CONSTEXPR ivector(_iTy&&... _Vec) : _Elems() {
 		_initialize_with_variadic(static_cast<_iTy&&>(_Vec)...);
 	}
 
-	inline ~ivector() {
+	_IRIS_CXX20_CONSTEXPR ~ivector() {
 		_Dealloc();
 	}
 
 public:
-	inline iterator begin() noexcept {
+	_IRIS_CXX20_CONSTEXPR iterator begin() noexcept {
 		return iterator(_Elems._First, 0);
 	}
 
-	inline iterator end() noexcept {
+	_IRIS_CXX20_CONSTEXPR iterator end() noexcept {
 		return iterator(_Elems._Last, size());
 	}
 
-	inline const_iterator cbegin() noexcept {
+	_IRIS_CXX20_CONSTEXPR const_iterator cbegin() noexcept {
 		return const_iterator(_Elems._First, 0);
 	}
 
-	inline const_iterator cend() noexcept {
+	_IRIS_CXX20_CONSTEXPR const_iterator cend() noexcept {
 		return const_iterator(_Elems._Last, size());
 	}
 
 public:
-	inline size_type size() const noexcept {
+	_IRIS_CXX20_CONSTEXPR size_type size() _IRIS_CONSEXCEPT {
 		return static_cast<size_type>(_Elems._Last - _Elems._First);
 	}
 
-	inline size_type capacity() const noexcept {
+	_IRIS_CXX20_CONSTEXPR size_type capacity() _IRIS_CONSEXCEPT {
 		return static_cast<size_type>(_Elems._End - _Elems._First);
 	}
 
-	inline bool empty() const noexcept {
+	_IRIS_CXX20_CONSTEXPR bool empty() _IRIS_CONSEXCEPT {
 	return _Elems._First == _Elems._Last;
 	}
 
-	inline value_type front() const noexcept {
+	_IRIS_CXX20_CONSTEXPR value_type front() _IRIS_CONSEXCEPT {
 		if (empty()) empty_vector();
 		return *_Elems._First;
 	}
 
-	inline value_type back() const noexcept {
+	_IRIS_CXX20_CONSTEXPR value_type back() _IRIS_CONSEXCEPT {
 		if (empty()) empty_vector();
 		return *(_Elems._Last - 1);
 	}
 
-	inline pointer data() noexcept {
+	_IRIS_CXX20_CONSTEXPR pointer data() noexcept {
 		return _Elems._First;
 	}
 
-	inline const_pointer data() const noexcept {
+	_IRIS_CXX20_CONSTEXPR const_pointer data() _IRIS_CONSEXCEPT {
 		return _Elems._First;
 	}
 
-	inline reference at(offset_type _Pos) {
+	_IRIS_CXX20_CONSTEXPR reference at(offset_type _Pos) {
 		if (_Pos < 0 || _Pos >= size()) i_ran();
 		return *(_Elems._First + _Pos);
 	}
@@ -316,7 +316,7 @@ public:
 		return *(_Elems._First + _Pos);
 	}
 
-	inline void push_back(const value_type& _Val) {
+	_IRIS_CXX20_CONSTEXPR void push_back(const value_type& _Val) {
 		if (_Elems._Last == _Elems._End) {
 			size_type _Capacity = _New_capacity();
 			_Alloc(_Capacity);
@@ -325,18 +325,18 @@ public:
 		_Emplace_back(_Val);
 	}
 
-    inline void pop_back() {
+    _IRIS_CXX20_CONSTEXPR void pop_back() {
         if(_Elems._Last != _Elems._First) {
             --_Elems._Last;
             _Elems._Last->~_iTy();
         }
     }
 
-    inline void reserve(size_type _Capacity) noexcept {
+    _IRIS_CXX20_CONSTEXPR void reserve(size_type _Capacity) noexcept {
         _Alloc(_Capacity + capacity());
     }
 
-	inline void clear() noexcept {
+	_IRIS_CXX20_CONSTEXPR void clear() noexcept {
 		if (_Elems._First != nullptr) {
 			for (pointer _Ptr = _Elems._First; _Ptr != _Elems._Last; ++_Ptr) {
 				_Ptr->~_iTy();
@@ -347,7 +347,7 @@ public:
 	}
 
 public:
-	inline iterator insert(const_iterator _Idx, const value_type& _Val) {
+	_IRIS_CXX20_CONSTEXPR iterator insert(const_iterator _Idx, const value_type& _Val) {
 		if (_Idx < begin() || _Idx > end()) invalid_iterator();
 		
 		offset_type _Pos = static_cast<offset_type>(_Idx - begin());
@@ -370,7 +370,7 @@ public:
 		return iterator(_Elems._First + _Pos);
 	}
 
-	inline iterator erase(const_iterator _Idx) {
+	_IRIS_CXX20_CONSTEXPR iterator erase(const_iterator _Idx) {
 		if (_Idx < begin() || _Idx > end()) invalid_iterator();
 		if (empty()) empty_vector();
 
@@ -386,13 +386,13 @@ public:
 	}
 
 public:
-	inline reference operator[](size_type _Pos) {
+	_IRIS_CXX20_CONSTEXPR reference operator[](size_type _Pos) {
 		if (_Pos < 0 || _Pos >= size()) i_ran();
 
 		return *(_Elems._First + _Pos);
 	}
 
-	inline const_reference operator[](size_type _Pos) const {
+	_IRIS_CXX20_CONSTEXPR const_reference operator[](size_type _Pos) const {
 		if (_Pos < 0 || _Pos >= size()) i_ran();
 
 		return *(_Elems._First + _Pos);
@@ -414,7 +414,7 @@ public:
 	}
 
 private:
-	inline void _Alloc(size_type _Capacity) noexcept {
+	_IRIS_CXX20_CONSTEXPR void _Alloc(size_type _Capacity) noexcept {
 		size_type _Size = size();
 		pointer _Myfirst = new value_type[_Capacity];
 
@@ -431,7 +431,7 @@ private:
 		_Elems._End	  = _Myfirst + _Capacity;
 	}
 
-	inline void _Dealloc() noexcept {
+	_IRIS_CXX20_CONSTEXPR void _Dealloc() noexcept {
 		delete[] _Elems._First;
 		_Elems._First = nullptr;
 		_Elems._Last  = nullptr;
@@ -439,18 +439,18 @@ private:
 	}
 
 	template <class... _iTy>
-	inline void _initialize_with_variadic(_iTy&&... _Vec) {
+	_IRIS_CXX20_CONSTEXPR void _initialize_with_variadic(_iTy&&... _Vec) {
 		size_type _Size = sizeof...(_Vec);
 		_Alloc(_Size);
 		((*_Elems._Last++ = static_cast<_iTy&&>(_Vec)), ...);
 	}
 
-	inline void _Emplace_back(const value_type& _Val) {
+	_IRIS_CXX20_CONSTEXPR void _Emplace_back(const value_type& _Val) {
 		new (_Elems._Last) value_type(_Val);
 		++_Elems._Last;
 	}
 
-	inline size_type _New_capacity() const {
+	_IRIS_CXX20_CONSTEXPR size_type _New_capacity() const {
 		size_type _Current = static_cast<size_type>(_Elems._End - _Elems._First);
 		size_type _New = _Current > 0 ? _Current + (_Current + 1) / 2 : 1;
 		return _New;

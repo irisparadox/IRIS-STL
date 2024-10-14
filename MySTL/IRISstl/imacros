@@ -6,6 +6,12 @@
 #define _IRIS_END \
 	}
 
+#define _IRIS IRIS::
+
+#define _IRIS_CXX20_CONSTEXPR inline
+#define _IRIS_CONSEXCEPT const noexcept
+#define _IRIS_ADDRSOF(ARG) __builtin_addressof(ARG)
+
 typedef unsigned __int64 isize_t;
 typedef __int64 ioffset_t;
 

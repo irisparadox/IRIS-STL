@@ -1,0 +1,38 @@
+#ifndef _ILIST_
+#define _ILIST_
+#include <imacros>
+#include <imemory>
+#include <iexceptions>
+
+_IRIS_BEGIN
+template <class _iTy>
+struct _Node {
+	using value_type = _iTy;
+	using _Nodeptr	 = _Node*;
+	_Nodeptr _Next;
+	_Nodeptr _Prev;
+	value_type _Val;
+
+	_Node()						   = default;
+	_Node(const _Node&)			   = delete;
+	_Node& operator=(const _Node&) = delete;
+
+	static _Nodeptr _Reheadnode() {
+		const auto _Head = _IRIS _Allocate<_Node>(1);
+		_IRIS _Construct_placed(_Head->_Next, _Head);
+		_IRIS _Construct_placed(_Head->_Prev, _Head);
+		return _Head;
+	}
+};
+
+template <class _iTy>
+class ilist {
+public:
+	using value_type	  = _iTy;
+	using pointer		  = _iTy*;
+	using const_pointer	  = const _iTy*;
+	using reference		  = _iTy&;
+	using const_reference = const _iTy&;
+};
+_IRIS_END
+#endif // _ILIST_
