@@ -12,6 +12,10 @@ int main() {
 	list.push_back(5);
 	list.push_front(10);
 
+	std::cout << list.front() << '\n';
+	std::cout << list.back() << '\n';
+	std::cout << list.size() << '\n';
+
 	while (1);
 
 	/*IRIS::ivector<int> vec = {1, 2, 3};

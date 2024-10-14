@@ -65,8 +65,26 @@ public:
 	}
 
 public:
+	_IRIS_CXX17_CONSTEXPR size_type size() _IRIS_CONSEXCEPT {
+		return _Size;
+	}
+
 	_IRIS_CXX17_CONSTEXPR bool empty() _IRIS_CONSEXCEPT {
 		return (_Head->_Next == _Head && _Head->_Prev == _Head);
+	}
+
+	_IRIS_CXX17_CONSTEXPR value_type front() const {
+#if __EXCEPTIONS__
+		if (empty())
+#endif
+		return _Head->_Next->_Val;
+	}
+
+	_IRIS_CXX17_CONSTEXPR value_type back() const {
+#if __EXCEPTIONS__
+		if (empty())
+#endif
+		return _Head->_Prev->_Val;
 	}
 
 	_IRIS_CXX17_CONSTEXPR void push_front(const value_type& _Val) {
@@ -74,6 +92,7 @@ public:
 
 		_Construct_placed(_newnode->_Val, _Val);
 		_Emplace_node_at_front(_newnode);
+		++_Size;
 	}
 
 	_IRIS_CXX17_CONSTEXPR void push_back(const value_type& _Val) {
@@ -81,6 +100,7 @@ public:
 
 		_Construct_placed(_newnode->_Val, _Val);
 		_Emplace_node_at_back(_newnode);
+		++_Size;
 	}
 
 private:
@@ -113,6 +133,7 @@ private:
 
 private:
 	_Nodeptr _Head; // pointer to head node
+	size_type _Size;
 };
 _IRIS_END
 #endif // _ILIST_

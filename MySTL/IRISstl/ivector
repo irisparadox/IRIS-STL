@@ -289,12 +289,12 @@ public:
 	return _Elems._First == _Elems._Last;
 	}
 
-	_IRIS_CXX17_CONSTEXPR value_type front() _IRIS_CONSEXCEPT {
+	_IRIS_CXX17_CONSTEXPR value_type front() const {
 		if (empty()) empty_vector();
 		return *_Elems._First;
 	}
 
-	_IRIS_CXX17_CONSTEXPR value_type back() _IRIS_CONSEXCEPT {
+	_IRIS_CXX17_CONSTEXPR value_type back() const {
 		if (empty()) empty_vector();
 		return *(_Elems._Last - 1);
 	}
