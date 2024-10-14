@@ -40,6 +40,19 @@ int main() {
 
 	std::cout << vec.capacity() << '\n';
 	std::cout << vec.size() << '\n';
-		
+
+	IRIS::ivector<int> vec1 = { 1, 2, 3, 4 };
+	IRIS::ivector<int> vec2 = { 1, 2, 3 };
+
+	if (vec1 == vec2) std::cout << "Yes\n";
+
+	it = vec1.begin();
+
+	it += 3;
+
+	it = vec1.erase(it);
+	
+	if (vec1 == vec2) std::cout << "Yes\n";
+	
 	return 0;
 }

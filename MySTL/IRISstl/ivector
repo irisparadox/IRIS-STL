@@ -73,7 +73,7 @@ public:
 
 	inline _iVector_const_iterator operator+(const offset_type _Off) const noexcept {
 		_iVector_const_iterator _Copy = *this;
-		_Copy += _Off;
+		_Copy._Idx += _Off;
 		return _Copy;
 	}
 
@@ -81,14 +81,24 @@ public:
 		return _Idx + _Right._Idx;
 	}
 
+	inline _iVector_const_iterator& operator+=(const offset_type _Off) noexcept {
+		_Idx += static_cast<size_type>(_Off);
+		return *this;
+	}
+
 	inline _iVector_const_iterator operator-(const offset_type _Off) const noexcept {
 		_iVector_const_iterator _Copy = *this;
-		_Copy -= _Off;
+		_Copy._Idx -= _Off;
 		return _Copy;
 	}
 
 	inline offset_type operator-(const _iVector_const_iterator& _Right) const noexcept {
 		return _Idx - _Right._Idx;
+	}
+
+	inline _iVector_const_iterator& operator-=(const offset_type _Off) noexcept {
+		_Idx -= static_cast<size_type>(_Off);
+		return *this;
 	}
 
 	inline const_reference operator[](const offset_type _Off) const noexcept {
@@ -180,6 +190,11 @@ public:
 		return _Baseit::operator+(_Right);
 	}
 
+	inline _iVector_iterator& operator+=(const offset_type _Off) noexcept {
+		_Baseit::operator+=(_Off);
+		return *this;
+	}
+
 	inline _iVector_iterator operator-(const offset_type _Off) const noexcept {
 		_iVector_iterator _Copy = *this;
 		_Copy -= _Off;
@@ -188,6 +203,11 @@ public:
 
 	inline offset_type operator-(const _iVector_iterator& _Right) const noexcept {
 		return _Baseit::operator-(_Right);
+	}
+
+	inline _iVector_iterator& operator-=(const offset_type _Off) noexcept {
+		_Baseit::operator-=(_Off);
+		return *this;
 	}
 
 	inline reference operator[](const offset_type _Off) const noexcept {
@@ -327,7 +347,7 @@ public:
 	}
 
 public:
-	inline iterator insert(iterator _Idx, const value_type& _Val) {
+	inline iterator insert(const_iterator _Idx, const value_type& _Val) {
 		if (_Idx < begin() || _Idx > end()) invalid_iterator();
 		
 		offset_type _Pos = static_cast<offset_type>(_Idx - begin());
@@ -337,7 +357,9 @@ public:
 			_Alloc(_cap);
 		}
 
-		for (offset_type i = size(); i > _Pos; --i) {
+		size_type _Size = size();
+
+		for (offset_type i = _Size; i > _Pos; --i) {
 			*(_Elems._First + i) = *(_Elems._First + (i - 1));
 		}
 
@@ -345,6 +367,21 @@ public:
 
 		++_Elems._Last;
 
+		return iterator(_Elems._First + _Pos);
+	}
+
+	inline iterator erase(const_iterator _Idx) {
+		if (_Idx < begin() || _Idx > end()) invalid_iterator();
+		if (empty()) empty_vector();
+
+		offset_type _Pos = static_cast<offset_type>(_Idx - begin());
+		size_type _Size = size();
+
+		for (size_type i = _Pos + 1; i < _Size; ++i) {
+			*(_Elems._First + (i - 1)) = *(_Elems._First + i);
+		}
+		--_Elems._Last;
+		_Elems._Last->~_iTy();
 		return iterator(_Elems._First + _Pos);
 	}
 
@@ -359,6 +396,21 @@ public:
 		if (_Pos < 0 || _Pos >= size()) i_ran();
 
 		return *(_Elems._First + _Pos);
+	}
+
+	constexpr bool operator==(const ivector& _Right) const {
+		if (size() != _Right.size()) return false;
+
+		auto& _RData = _Right._Elems;
+		pointer _Ptrl  = _Elems._First;
+		pointer _Ptrr = _RData._First;
+		while (_Ptrl != _Elems._Last && _Ptrr != _RData._Last) {
+			if (*_Ptrl != *_Ptrr) return false;
+			++_Ptrl;
+			++_Ptrr;
+		}
+
+		return true;
 	}
 
 private:
