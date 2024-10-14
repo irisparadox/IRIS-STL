@@ -18,10 +18,21 @@ struct _Node {
 	_Node& operator=(const _Node&) = delete;
 
 	static _Nodeptr _Reheadnode() {
-		const auto _Head = _IRIS _Allocate<_Node>(1);
-		_IRIS _Construct_placed(_Head->_Next, _Head);
-		_IRIS _Construct_placed(_Head->_Prev, _Head);
+		const auto _Head = _Allocate<_Node>(1);
+		_Construct_placed(_Head->_Next, _Head);
+		_Construct_placed(_Head->_Prev, _Head);
 		return _Head;
+	}
+
+	static void _Freenode0(_Nodeptr _Ptr) noexcept {
+		_Destroy_placed(_Ptr->_Next);
+		_Destroy_placed(_Ptr->_Prev);
+		_Deallocate<_Node>(_Ptr, 1);
+	}
+
+	static void _Freenode(_Nodeptr _Ptr) noexcept {
+		_Destroy<_Node>(_Ptr);
+		_Freenode0(_Ptr);
 	}
 };
 

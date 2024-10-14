@@ -8,7 +8,7 @@
 
 #define _IRIS IRIS::
 
-#define _IRIS_CXX20_CONSTEXPR inline
+#define _IRIS_CXX17_CONSTEXPR inline
 #define _IRIS_CONSEXCEPT const noexcept
 #define _IRIS_ADDRSOF(ARG) __builtin_addressof(ARG)
 

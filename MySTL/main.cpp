@@ -4,7 +4,6 @@
 #include <ivector>
 #include <array>
 #include <ilist>
-#include <list>
 
 int main() {
 	IRIS::ivector<int> vec = { 1, 2, 3 };

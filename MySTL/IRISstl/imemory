@@ -5,14 +5,37 @@
 
 _IRIS_BEGIN
 template <class _iTy, class... _Types>
-_IRIS_CXX20_CONSTEXPR void _Construct_placed(_iTy& _Obj, _Types&&... _Args) noexcept {
+_IRIS_CXX17_CONSTEXPR void _Construct_placed(_iTy& _Obj, _Types&&... _Args) noexcept {
 	::new (static_cast<void*>(_IRIS_ADDRSOF(_Obj))) _iTy(_IRIS forward<_Types>(_Args)...);
 }
 
+template <class _iTy>
+_IRIS_CXX17_CONSTEXPR void _Destroy_placed(_iTy& _Obj) noexcept {
+	if constexpr (is_array<_iTy>) {
+		// TODO
+	}
+	else {
+		_Obj.~_iTy();
+	}
+}
+
 template <class _SizedType>
-_IRIS_CXX20_CONSTEXPR _SizedType* _Allocate(isize_t _Blocks) {
+_IRIS_CXX17_CONSTEXPR _SizedType* _Allocate(isize_t _Blocks) {
 	void* _Raw_mem = operator new(_Blocks * sizeof(_SizedType));
 	return static_cast<_SizedType*>(_Raw_mem);
+}
+
+template <class _SizedType>
+_IRIS_CXX17_CONSTEXPR void _Deallocate(_SizedType* _Ptr, isize_t _Blocks) {
+	operator delete(static_cast<void*>(_Ptr), _Blocks * sizeof(_SizedType));
+}
+
+template <class _iTy>
+_IRIS_CXX17_CONSTEXPR void _Destroy(_iTy* _Ptr) noexcept {
+	if (_Ptr) {
+		_Destroy_placed(_Ptr->_Myval);
+		delete _Ptr;
+	}
 }
 _IRIS_END
 #endif // _IMEMORY_
