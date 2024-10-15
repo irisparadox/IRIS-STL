@@ -8,9 +8,18 @@
 int main() {
 
 	IRIS::ilist<int> list;
+	IRIS::ilist<IRIS::ilist<int>> listOflists;
+	IRIS::ilist<IRIS::ilist<IRIS::ilist<int>>> listOfAListOfLists;
 
 	list.push_back(5);
 	list.push_front(10);
+
+	listOflists.push_back(list);
+
+	listOfAListOfLists.push_back(listOflists);
+
+	std::cout << listOflists.front().front() << '\n';
+	std::cout << listOfAListOfLists.front().front().front() << '\n';
 
 	std::cout << list.front() << '\n';
 	std::cout << list.back() << '\n';
