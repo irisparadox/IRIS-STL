@@ -60,8 +60,21 @@ public:
 	using _Node = _Node<value_type>;
 	using _Nodeptr = typename _Node::_Nodeptr;
 
-	_IRIS_CXX17_CONSTEXPR ilist() noexcept : _Size(0) {
+	ilist() noexcept : _Size(0) {
 		_Head = _Node::_Reheadnode();
+	}
+
+	ilist(const ilist& _Other) {
+		// TODO ITERATORS
+		/*for (auto& _Thenode : _Other) {
+			push_back(_Thenode);
+		}
+		*/
+	}
+
+	~ilist() noexcept {
+		_Free();
+		_Size = 0;
 	}
 
 public:
@@ -70,7 +83,7 @@ public:
 	}
 
 	_IRIS_CXX17_CONSTEXPR bool empty() _IRIS_CONSEXCEPT {
-		return (_Head->_Next == _Head && _Head->_Prev == _Head);
+		return _Size == 0;
 	}
 
 	_IRIS_CXX17_CONSTEXPR value_type front() const {
@@ -87,7 +100,7 @@ public:
 		return _Head->_Prev->_Val;
 	}
 
-	_IRIS_CXX17_CONSTEXPR void push_front(const value_type& _Val) {
+	void push_front(const value_type& _Val) {
 		_Nodeptr _newnode = _Allocate<_Node>(1);
 
 		_Construct_placed(_newnode->_Val, _Val);
@@ -95,7 +108,15 @@ public:
 		++_Size;
 	}
 
-	_IRIS_CXX17_CONSTEXPR void push_back(const value_type& _Val) {
+	void push_front(value_type&& _Val) {
+		_Nodeptr _newnode = _Allocate<_Node>(1);
+
+		_Construct_placed(_newnode->_Val, _IRIS move(_Val));
+		_Emplace_node_at_front(_newnode);
+		++_Size;
+	}
+
+	void push_back(const value_type& _Val) {
 		_Nodeptr _newnode = _Allocate<_Node>(1);
 
 		_Construct_placed(_newnode->_Val, _Val);
@@ -103,11 +124,26 @@ public:
 		++_Size;
 	}
 
-	_IRIS_CXX17_CONSTEXPR void clear() noexcept {
+	void push_back(value_type&& _Val) {
+		_Nodeptr _newnode = _Allocate<_Node>(1);
+
+		_Construct_placed(_newnode->_Val, _IRIS move(_Val));
+		_Emplace_node_at_back(_newnode);
+		++_Size;
+	}
+
+public:
+	void clear() noexcept {
 		_Node::_Free_non_head(_Head);
 		_Head->_Next = _Head;
 		_Head->_Prev = _Head;
 		_Size = 0;
+	}
+
+private:
+	void _Free() noexcept {
+		if(!empty()) _Node::_Free_non_head(_Head);
+		_Node::_Freenode0(_Head);
 	}
 
 private:
@@ -118,7 +154,7 @@ private:
 		_Ptr->_Prev = _Head;
 	}
 
-	_IRIS_CXX17_CONSTEXPR void _Emplace_node_at_front(_Nodeptr _Ptr) {
+	void _Emplace_node_at_front(_Nodeptr _Ptr) {
 		if (empty()) _Emplace_empty(_Ptr);
 		else {
 			_Ptr->_Prev = _Head;
@@ -128,7 +164,7 @@ private:
 		}
 	}
 
-	_IRIS_CXX17_CONSTEXPR void _Emplace_node_at_back(_Nodeptr _Ptr) {
+	void _Emplace_node_at_back(_Nodeptr _Ptr) {
 		if (empty()) _Emplace_empty(_Ptr);
 		else {
 			_Ptr->_Prev			= _Head->_Prev;

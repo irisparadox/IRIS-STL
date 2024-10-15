@@ -8,26 +8,19 @@
 int main() {
 
 	IRIS::ilist<int> list;
-	IRIS::ilist<IRIS::ilist<int>> listOflists;
-	IRIS::ilist<IRIS::ilist<IRIS::ilist<int>>> listOfAListOfLists;
+	IRIS::ilist<IRIS::ivector<int>> listVec;
+
+	IRIS::ivector<int> newVec = { 1, 2, 3 };
+	listVec.push_back(newVec);
 
 	list.push_back(5);
 	list.push_front(10);
-
-	listOflists.push_back(list);
-
-	listOfAListOfLists.push_back(listOflists);
-
-	std::cout << listOflists.front().front() << '\n';
-	std::cout << listOfAListOfLists.front().front().front() << '\n';
 
 	std::cout << list.front() << '\n';
 	std::cout << list.back() << '\n';
 	std::cout << list.size() << '\n';
 
 	list.clear();
-
-	while (1);
 
 	/*IRIS::ivector<int> vec = {1, 2, 3};
 	vec.push_back(1);

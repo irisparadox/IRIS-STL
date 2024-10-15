@@ -40,5 +40,10 @@ template <class _iTy>
 constexpr _iTy&& forward(remove_ref_t<_iTy>& _Arg) noexcept {
 	return static_cast<_iTy&&>(_Arg);
 }
+
+template <class _iTy>
+constexpr remove_ref_t<_iTy>&& move(_iTy&& _Arg) noexcept {
+	return static_cast<remove_ref_t<_iTy>&&>(_Arg);
+}
 _IRIS_END
 #endif // _ITYPE_TRAITS_
