@@ -16,6 +16,8 @@ int main() {
 	std::cout << list.back() << '\n';
 	std::cout << list.size() << '\n';
 
+	list.clear();
+
 	while (1);
 
 	/*IRIS::ivector<int> vec = {1, 2, 3};

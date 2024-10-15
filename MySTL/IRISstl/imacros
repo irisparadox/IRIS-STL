@@ -15,13 +15,4 @@
 typedef unsigned __int64 isize_t;
 typedef __int64 ioffset_t;
 
-template <class _Value_type>
-struct _Base_types {
-	using value_type    = _Value_type;
-	using size_type     = isize_t;
-	using offset_type   = ioffset_t;
-	using pointer	    = value_type*;
-	using const_pointer = const value_type*;
-};
-
 #endif // _IMACROS_

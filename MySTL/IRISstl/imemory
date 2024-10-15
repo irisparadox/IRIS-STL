@@ -31,10 +31,8 @@ _IRIS_CXX17_CONSTEXPR void _Deallocate(_SizedType* _Ptr, isize_t _Blocks) {
 }
 
 template <class _iTy>
-_IRIS_CXX17_CONSTEXPR void _Destroy(_iTy* _Ptr) noexcept {
-	if (_Ptr) {
-		_Destroy_placed(_Ptr->_Myval);
-	}
+_IRIS_CXX17_CONSTEXPR void _Destroy(_iTy& _Val) noexcept {
+	_Destroy_placed(_Val);
 }
 _IRIS_END
 #endif // _IMEMORY_

@@ -32,8 +32,8 @@ struct _Node {
 	}
 
 	static void _Freenode(_Nodeptr _Ptr) noexcept {
-		// desttoy node and then free children
-		_Destroy<_Node>(_Ptr);
+		// destroy node and then free children
+		_Destroy<_iTy>(_Ptr->_Val);
 		_Freenode0(_Ptr);
 	}
 
@@ -60,7 +60,7 @@ public:
 	using _Node = _Node<value_type>;
 	using _Nodeptr = typename _Node::_Nodeptr;
 
-	_IRIS_CXX17_CONSTEXPR ilist() noexcept {
+	_IRIS_CXX17_CONSTEXPR ilist() noexcept : _Size(0) {
 		_Head = _Node::_Reheadnode();
 	}
 
@@ -101,6 +101,13 @@ public:
 		_Construct_placed(_newnode->_Val, _Val);
 		_Emplace_node_at_back(_newnode);
 		++_Size;
+	}
+
+	_IRIS_CXX17_CONSTEXPR void clear() noexcept {
+		_Node::_Free_non_head(_Head);
+		_Head->_Next = _Head;
+		_Head->_Prev = _Head;
+		_Size = 0;
 	}
 
 private:
