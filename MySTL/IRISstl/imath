@@ -1,0 +1,28 @@
+#ifndef _IMATH_
+#define _IMATH_
+#include <iexceptions>
+
+_IRIS_BEGIN
+long double abs(const long double& _Num) {
+	return (_Num < 0) ? -_Num : _Num;
+}
+
+long double sqrt(const long double& _Num) {
+	if (_Num < 0) throw _IRIS neg_sqrt("Negative number provided on sqrt");
+	if (_Num == 0 || _Num == 1) return _Num;
+
+	long double _epsilon = 0.0000000000000001;
+	long double _X = _Num;
+
+	while (true) {
+		long double _Next_X = 0.5 * (_X + _Num / _X);
+		if (abs(_Next_X - _X) < _epsilon) {
+			break;
+		}
+		_X = _Next_X;
+	}
+
+	return _X;
+}
+_IRIS_END
+#endif // _IMATH_

@@ -1,0 +1,74 @@
+#ifndef _ICOMPLEX_
+#define _ICOMPLEX_
+#include <imath>
+#include <imacros>
+
+_IRIS_BEGIN
+template <typename _Ty>
+class complex {
+public:
+	using const_ty  = const _Ty;
+	using reference = _Ty&;
+
+	_IRIS_CXX17_CONSTEXPR complex() noexcept : _Myreal(), _Myimg() {}
+	_IRIS_CXX17_CONSTEXPR complex(const _Ty& _Real, const _Ty& _Img) noexcept : _Myreal(_Real), _Myimg(_Img) {}
+	_IRIS_CXX17_CONSTEXPR complex(const complex& _Other) noexcept {
+		_Myreal = _Other._Myreal;
+		_Myimg  = _Other._Myimg;
+	}
+
+public:
+	_IRIS_CXX17_CONSTEXPR complex operator+(const complex& _Other) _IRIS_CONSEXCEPT {
+		return complex(_Myreal + _Other._Myreal, _Myimg + _Other._Myimg);
+	}
+
+	_IRIS_CXX17_CONSTEXPR complex operator-(const complex& _Other) _IRIS_CONSEXCEPT {
+		return complex(_Myreal - _Other._Myreal, _Myimg - _Other._Myimg);
+	}
+
+	_IRIS_CXX17_CONSTEXPR complex operator*(const complex& _Other) _IRIS_CONSEXCEPT {
+		return complex(_Myreal * _Other._Myreal - _Myimg * _Other._Myimg, _Myreal * _Other._Myimg + _Myimg * _Other._Myreal);
+	}
+
+	_IRIS_CXX17_CONSTEXPR complex operator/(const complex& _Other) _IRIS_CONSEXCEPT {
+		_Ty denom = (_Other._Myreal * _Other._Myreal + _Other._Myimg * _Other._Myimg);
+		_Ty real  = (_Myreal * _Other._Myreal + _Myimg * _Other._Myimg) / denom;
+		_Ty img   = (_Myimg * _Other._Myreal - _Myreal * _Other._Myimg) / denom;
+
+		return complex(real, img);
+	}
+
+public:
+	template <isize_t _Idx, typename _Ty>
+	friend _Ty& get(complex<_Ty>& _Comp);
+
+	template <typename _Ty>
+	friend _IRIS_CXX17_CONSTEXPR const long double abs(complex<_Ty>& _Comp);
+
+	_IRIS_CXX17_CONSTEXPR const_ty real() _IRIS_CONSEXCEPT {
+		return _Myreal;
+	}
+
+	_IRIS_CXX17_CONSTEXPR const_ty imag() _IRIS_CONSEXCEPT {
+		return _Myreal;
+	}
+protected:
+	_Ty _Myreal;
+	_Ty _Myimg;
+};
+
+template <isize_t _Idx, typename _Ty>
+_Ty& get(complex<_Ty>& _Comp) {
+	static_assert(_Idx == 0 || _Idx == 1, "Tuple index should be 0 or 1");
+	if constexpr (_Idx == 0)
+		return _Comp._Myreal;
+	else
+		return _Comp._Myimg;
+}
+
+template <typename _Ty>
+_IRIS_CXX17_CONSTEXPR const long double abs(complex<_Ty>& _Comp) {
+	return _IRIS sqrt((_Comp._Myreal * _Comp._Myreal) + (_Comp._Myimg * _Comp._Myimg));
+}
+_IRIS_END
+#endif // _ICOMPLEX_

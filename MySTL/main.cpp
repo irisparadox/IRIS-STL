@@ -4,9 +4,21 @@
 #include <ivector>
 #include <array>
 #include <ilist>
+#include <icomplex>
 
 int main() {
 
+	IRIS::complex<float> c(1.0f, 2.0f);
+	IRIS::complex<float> z = c;
+
+	IRIS::complex<float> w = c / z;
+
+	IRIS::get<1, float>(w) = 5;
+	std::cout << IRIS::abs(w);
+
+	while (1);
+
+	/*
 	IRIS::ilist<int> list;
 	IRIS::ilist<IRIS::ivector<int>> listVec;
 
@@ -21,6 +33,7 @@ int main() {
 	std::cout << list.size() << '\n';
 
 	list.clear();
+	/*
 
 	/*IRIS::ivector<int> vec = {1, 2, 3};
 	vec.push_back(1);

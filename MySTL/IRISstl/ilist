@@ -49,7 +49,7 @@ struct _Node {
 };
 
 template <class _iTy>
-class ilist {
+class list {
 public:
 	using value_type	  = _iTy;
 	using pointer		  = _iTy*;
@@ -60,11 +60,11 @@ public:
 	using _Node = _Node<value_type>;
 	using _Nodeptr = typename _Node::_Nodeptr;
 
-	ilist() noexcept : _Size(0) {
+	list() noexcept : _Size(0) {
 		_Head = _Node::_Reheadnode();
 	}
 
-	ilist(const ilist& _Other) {
+	list(const list& _Other) {
 		// TODO ITERATORS
 		/*for (auto& _Thenode : _Other) {
 			push_back(_Thenode);
@@ -72,7 +72,7 @@ public:
 		*/
 	}
 
-	~ilist() noexcept {
+	~list() noexcept {
 		_Free();
 		_Size = 0;
 	}

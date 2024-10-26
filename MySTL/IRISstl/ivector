@@ -235,7 +235,7 @@ public:
 };
 
 template <class _iTy>
-class ivector {
+class vector {
 public:
 	using value_type	  = _iTy;
 	using pointer		  = _iTy*;
@@ -248,14 +248,14 @@ public:
 	using const_iterator = _iVector_const_iterator<_iTy>;
 	using iterator		 = _iVector_iterator<_iTy>;
 
-	_IRIS_CXX17_CONSTEXPR ivector() : _Elems() {}
+	_IRIS_CXX17_CONSTEXPR vector() : _Elems() {}
 
 	template <class... _iTy>
-	_IRIS_CXX17_CONSTEXPR ivector(_iTy&&... _Vec) : _Elems() {
+	_IRIS_CXX17_CONSTEXPR vector(_iTy&&... _Vec) : _Elems() {
 		_initialize_with_variadic(_IRIS forward<_iTy>(_Vec)...);
 	}
 
-	_IRIS_CXX17_CONSTEXPR ~ivector() {
+	_IRIS_CXX17_CONSTEXPR ~vector() {
 		_Dealloc();
 	}
 
@@ -399,7 +399,7 @@ public:
 		return *(_Elems._First + _Pos);
 	}
 
-	constexpr bool operator==(const ivector& _Right) const {
+	constexpr bool operator==(const vector& _Right) const {
 		if (size() != _Right.size()) return false;
 
 		auto& _RData = _Right._Elems;

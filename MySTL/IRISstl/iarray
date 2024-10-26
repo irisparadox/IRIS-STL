@@ -158,7 +158,7 @@ public:
 };
 
 template <class _iTy, isize_t _Size>
-class iarray {
+class array {
 public:
 	using value_type	   = _iTy;
 	using ireference	   = _iTy&;

@@ -39,5 +39,10 @@ class empty_container : public exception {
 public:
 	empty_container(const char* _Msg) : exception(_Msg) {}
 };
+
+class neg_sqrt		  : public exception {
+public:
+	neg_sqrt(const char* _Msg)		  : exception(_Msg) {}
+};
 _IRIS_END
 #endif // _IEXCEPTIONS_
