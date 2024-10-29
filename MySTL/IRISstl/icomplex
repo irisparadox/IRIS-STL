@@ -45,6 +45,10 @@ public:
 	template <typename _Ty>
 	friend _IRIS_CXX17_CONSTEXPR const long double abs(complex<_Ty>& _Comp);
 
+	_IRIS_CXX17_CONSTEXPR const long double arg() const {
+		return atan2(_Myimg, _Myreal);
+	}
+
 	_IRIS_CXX17_CONSTEXPR const_ty real() _IRIS_CONSEXCEPT {
 		return _Myreal;
 	}

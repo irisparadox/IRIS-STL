@@ -5,6 +5,7 @@
 #include <array>
 #include <ilist>
 #include <icomplex>
+#include <complex>
 
 int main() {
 
@@ -14,7 +15,12 @@ int main() {
 	IRIS::complex<float> w = c / z;
 
 	IRIS::get<1, float>(w) = 5;
-	std::cout << IRIS::abs(w);
+	std::cout << IRIS::abs(w) << '\n';
+
+	std::complex<float> a(1, 5);
+
+	std::cout << w.arg() << '\n';
+	std::cout << std::arg(a) << '\n';
 
 	while (1);
 

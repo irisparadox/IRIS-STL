@@ -15,4 +15,6 @@
 typedef unsigned __int64 isize_t;
 typedef __int64 ioffset_t;
 
+#define I_PI 3.14159265358979323846
+
 #endif // _IMACROS_

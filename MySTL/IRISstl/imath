@@ -1,5 +1,6 @@
 #ifndef _IMATH_
 #define _IMATH_
+#include <imacros>
 #include <iexceptions>
 
 _IRIS_BEGIN
@@ -23,6 +24,29 @@ long double sqrt(const long double& _Num) {
 	}
 
 	return _X;
+}
+
+long double atan(const long double& _X) {
+	long double result = _X;
+	long double _X2	   = _X * _X;
+	long double term   = _X;
+	bool _Neg		   = false;
+
+	for (int i = 3; i <= 19; i += 2) {
+		term *= _X2;
+		result += (_Neg ? -1 : 1) * term / i;
+		_Neg = !_Neg;
+	}
+
+	return result;
+}
+
+long double atan2(const long double& _X, const long double& _Y) {
+	if (_X > 0) return atan(_Y / _X);
+	else if (_X < 0 && _Y >= 0) return atan(_Y / _X) + I_PI;
+	else if (_X < 0 && _Y < 0) return atan(_Y / _X) - I_PI;
+	else if (_X == 0 && _Y != 0) return (_Y > 0) ? I_PI / 2 : -I_PI / 2;
+	else return 0;
 }
 _IRIS_END
 #endif // _IMATH_
