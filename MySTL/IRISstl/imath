@@ -26,27 +26,42 @@ long double sqrt(const long double& _Num) {
 	return _X;
 }
 
-long double atan(const long double& _X) {
-	long double result = _X;
-	long double _X2	   = _X * _X;
-	long double term   = _X;
-	bool _Neg		   = false;
+float atan(float _X) {
+	static const uint32_t sign_mask = 0x80000000;
+	static const float b = 0.596227f;
 
-	for (int i = 3; i <= 19; i += 2) {
-		term *= _X2;
-		result += (_Neg ? -1 : 1) * term / i;
-		_Neg = !_Neg;
-	}
+	// Extract the sign bit
+	uint32_t ux_s = sign_mask & (uint32_t&)_X;
 
-	return result;
+	// Calculate the arctangent in the first quadrant
+	float bx_a = (float)abs(b * _X);
+	float num = bx_a + _X * _X;
+	float atan_1q = num / (1.f + bx_a + num);
+
+	// Restore the sign bit
+	uint32_t atan_2q = ux_s | (uint32_t&)atan_1q;
+	return (float&)atan_2q;
 }
 
-long double atan2(const long double& _X, const long double& _Y) {
-	if (_X > 0) return atan(_Y / _X);
-	else if (_X < 0 && _Y >= 0) return atan(_Y / _X) + I_PI;
-	else if (_X < 0 && _Y < 0) return atan(_Y / _X) - I_PI;
-	else if (_X == 0 && _Y != 0) return (_Y > 0) ? I_PI / 2 : -I_PI / 2;
-	else return 0;
+float atan2(float _Y, float _X) {
+	static const uint32_t sign_mask = 0x80000000;
+	static const float b = 0.596227f;
+
+	// Extract the sign bits
+	uint32_t ux_s = sign_mask & (uint32_t&)_X;
+	uint32_t uy_s = sign_mask & (uint32_t&)_Y;
+
+	// Determine the quadrant offset
+	float q = (float)((~ux_s & uy_s) >> 29 | ux_s >> 30);
+
+	// Calculate the arctangent in the first quadrant
+	float bxy_a = (float)abs(b * _X * _Y);
+	float num = bxy_a + _Y * _Y;
+	float atan_1q = num / (_X * _X + bxy_a + num);
+
+	// Translate it to the proper quadrant
+	uint32_t uatan_2q = (ux_s ^ uy_s) | (uint32_t&)atan_1q;
+	return q + (float&)uatan_2q;
 }
 _IRIS_END
 #endif // _IMATH_
