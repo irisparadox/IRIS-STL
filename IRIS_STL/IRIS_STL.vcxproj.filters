@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\allocator.h">
+    <ClInclude Include="include\memory_pool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\cxx_config.h">
@@ -27,5 +27,22 @@
     <ClInclude Include="include\mem_operators.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\type_traits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\move.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="include\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

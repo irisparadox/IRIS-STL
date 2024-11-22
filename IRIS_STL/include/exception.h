@@ -7,11 +7,11 @@ _IRIS_BEGIN_
 class exception {
 public:
 	exception() throw() {}
-	virtual ~exception() throw();
+	virtual ~exception() throw() {}
 
 	/* Returns a string which describes the cause of the error
 	*/
-	virtual const char* what() const throw();
+	virtual const char* what() const throw() { return nullptr; }
 };
 _IRIS_END_
 
