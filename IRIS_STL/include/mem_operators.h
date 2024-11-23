@@ -5,6 +5,13 @@
 #include <exception.h>
 
 _IRIS_BEGIN_
+
+/**
+*	@brief Exception probably thrown by @c new.
+*	@ingroup exceptions
+* 
+*	@c bad_alloc is used to throw exceptions when allocating using @c new.
+*/
 class bad_alloc : public exception {
 public:
 	bad_alloc() throw() {}
@@ -14,8 +21,15 @@ public:
 };
 _IRIS_END_
 
-void* operator new(IRIS::size_t) throw(IRIS::bad_alloc);
-void* operator new[](IRIS::size_t) throw(IRIS::bad_alloc);
+#if _REDEFINE_NEW_OPERATORS_
+#if __cplusplus < __CXX17__
+	void* operator new(IRIS::size_t) throw(IRIS::bad_alloc);
+	void* operator new[](IRIS::size_t) throw(IRIS::bad_alloc);
+#else
+	void* operator new(IRIS::size_t) noexcept(false);
+	void* operator new[](IRIS::size_t) noexcept(false);
+#endif
+
 void  operator delete(void*) throw();
 void  operator delete[](void*) throw();
 
@@ -26,5 +40,6 @@ inline void* operator new[](IRIS::size_t, void* _Ptr) throw() { return _Ptr; }
 // Default versions of delete
 inline void  operator delete(void*, void*) throw() { }
 inline void  operator delete[](void*, void*) throw() { }
+#endif // _REDEFINE_NEW_OPERATORS_
 
 #endif // _IRIS_MEM_OPERATORS_

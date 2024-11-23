@@ -3,10 +3,14 @@
 
 #include <cxx_config.h>
 #include <type_traits.h>
+#include <exception.h>
+#include <mem_operators.h>
 #include <move.h>
-#include <memory_pool.h>
+
+#define _REDEFINE_NEW_OPERATORS_
 
 _IRIS_BEGIN_
+
 template <typename _Ty>
 class allocator {
 public:
@@ -64,4 +68,5 @@ public:
 	}
 };
 _IRIS_END_
+#undef _REDEFINE_NEW_OPERATORS_
 #endif // _IRIS_ALLOCATOR_

@@ -13,6 +13,14 @@ public:
 	const char* what() const throw() { return "bad object construct"; }
 };
 
+class length_error : public exception {
+public:
+	length_error() throw() {}
+	~length_error() throw() {}
+	
+	const char* what() const throw() { return "specified length is over the limit"; }
+};
+
 template<typename _Ty, typename _Al>
 struct _Vector_base {
 	typedef typename _Al::template rebind<_Ty>::other _Myal_type;
@@ -117,27 +125,51 @@ public:
 	}
 
 	~vector() {
-		pointer _Current = _Myimp._Mylast;
-		for (; _Current != _Myimp._Myfirst; --_Current) {
-			_Myimp.destroy(IRIS::__addressof(*_Current));
-		}
+		_Destroy();
 	}
 
 public:
-	size_t capacity() const {
-		return _Myimp._Myend - _Myimp._Myfirst;
+	bool empty() const {
+		return _Myimp._Myfirst == _Myimp._Mylast;
 	}
 
 	size_t size() const {
 		return _Myimp._Mylast - _Myimp._Myfirst;
 	}
+	
+	size_t max_size() const {
+		return _Myimp.max_size();
+	}
+
+	void reserve(size_t _Size) {
+		if (_Size > max_size()) _Elength_();
+		if (_Size < capacity()) return;
+
+		const size_type _old_size = size();
+		pointer _tmp = _Allocate_and_copy(_Size, _Myimp._Myfirst, _Myimp._Mylast);
+		_Destroy();
+		_Dealloc(_Myimp._Myfirst, _Myimp._Myend - _Myimp._Myfirst);
+		_Myimp._Myfirst = _tmp;
+		_Myimp._Mylast  = _tmp + _old_size;
+		_Myimp._Myend	= _Myimp._Myfirst + _Size;
+	}
+
+	size_t capacity() const {
+		return _Myimp._Myend - _Myimp._Myfirst;
+	}
 
 public:
 	void push_back(const value_type& _Val) {
-		if (_Myimp._Mylast == _Myimp._Myend);
+		if (_Myimp._Mylast == _Myimp._Myend) reserve(_New_capacity());
 
 		_Myimp.construct(_Myimp._Mylast, _Val);
 		++_Myimp._Mylast;
+	}
+
+private:
+	size_t _New_capacity() {
+		size_t _old = capacity();
+		return (_old > 1) ? _old + (_old / 2) : ++_old;
 	}
 	
 private:
@@ -149,11 +181,44 @@ private:
 			}
 		}
 		catch (...) {
-			for (; _Current != _Myimp._Myfirst; --_Current) {
+			for (; _Current >= _Myimp._Myfirst; --_Current) {
 				_Myimp.destroy(IRIS::__addressof(*_Current));
 			}
-			throw bad_construct();
+			_Econstruct_();
 		}
+	}
+
+	pointer _Allocate_and_copy(size_t _Size, pointer _First, pointer _Last) {
+		pointer _result = _Myimp.allocate(_Size);
+		pointer _Current = _result;
+		try {
+			for (; _First != _Last; ++_First, ++_Current) {
+				_Myimp.construct(IRIS::__addressof(*_Current), *_First);
+			}
+			return _result;
+		}
+		catch (...) {
+			for (; _Current >= _result; --_Current) {
+				_Myimp.destroy(IRIS::__addressof(*_Current));
+				_Econstruct_();
+			}
+		}
+	}
+
+	void _Destroy() {
+		pointer _Current = _Myimp._Myfirst;
+		for (; _Current != _Myimp._Mylast; ++_Current) {
+			_Myimp.destroy(IRIS::__addressof(*_Current));
+		}
+	}
+
+private:
+	[[noreturn]] void _Elength_() {
+		throw length_error();
+	}
+
+	[[noreturn]] void _Econstruct_() {
+		throw bad_construct();
 	}
 };
 _IRIS_END_
