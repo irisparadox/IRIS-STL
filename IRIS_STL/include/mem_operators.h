@@ -21,7 +21,7 @@ public:
 };
 _IRIS_END_
 
-#if _REDEFINE_NEW_OPERATORS_
+#ifdef _REDEFINE_NEW_OPERATORS_
 #if __cplusplus < __CXX17__
 	void* operator new(IRIS::size_t) throw(IRIS::bad_alloc);
 	void* operator new[](IRIS::size_t) throw(IRIS::bad_alloc);

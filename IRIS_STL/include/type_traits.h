@@ -48,7 +48,7 @@ struct is_lvalue_reference<_Ty&>  : public true_type  {};
 template < typename>
 struct is_rvalue_reference        : public false_type {};
 
-template<typename _Tp>
+template <typename _Tp>
 struct is_rvalue_reference<_Tp&&> : public true_type  {};
 
 _IRIS_END_

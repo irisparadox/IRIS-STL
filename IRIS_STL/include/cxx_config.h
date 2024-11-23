@@ -12,6 +12,20 @@
 #define __CXX20__ 202002L // C++20
 #define __CXX23__ 202302L // C++23
 
+// Macro for constexpr, automated for compatibility between C++ versions
+#ifndef _ILIBCXX_CONSTEXPR
+#	if __cplusplus >= __CXX11__
+#		define _ILIBCXX_CONSTEXPR constexpr
+#		define _ILIBCXX_USE_CONSTEXPR constexpr
+#	else
+#		define _ILIBCXX_CONSTEXPR
+#		define _ILIBCXX_USE_CONSTEXPR const
+#	endif // __cpluplus >= __CXX11__
+#endif // _ILIBCXX_CONSTEXPR
+
+// Is in 0X mode
+#define __CXX_HASCXX0X__ __cplusplus >= __CXX11__
+
 // Macros for namespacing
 //	_IRIS_BEGIN_
 //	_IRIS_END_

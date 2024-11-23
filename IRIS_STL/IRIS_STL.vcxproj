@@ -143,6 +143,7 @@
     <ClInclude Include="include\exception.h" />
     <ClInclude Include="include\mem_operators.h" />
     <ClInclude Include="include\move.h" />
+    <ClInclude Include="include\pair.h" />
     <ClInclude Include="include\type_traits.h" />
     <ClInclude Include="include\vector.h" />
   </ItemGroup>
