@@ -147,6 +147,9 @@
   <ItemGroup>
     <ClCompile Include="include\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="IRIS_STL.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

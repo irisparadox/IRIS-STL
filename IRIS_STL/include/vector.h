@@ -108,29 +108,53 @@ public:
 	*/
 	explicit vector(const allocator_type& _Alloc) : _Mybase(_Alloc) {}
 
+	/**
+	*   @brief Constructor of vector with no elements, given an initial size.
+	*	@param _Size Vector initial size.
+	*/
 	explicit vector(size_type _Size) : _Mybase(_Size) {
 		_Default_initialization(_Size);
 	}
+
+	~vector() {
+		pointer _Current = _Myimp._Mylast;
+		for (; _Current != _Myimp._Myfirst; --_Current) {
+			_Myimp.destroy(IRIS::__addressof(*_Current));
+		}
+	}
+
+public:
+	size_t capacity() const {
+		return _Myimp._Myend - _Myimp._Myfirst;
+	}
+
+	size_t size() const {
+		return _Myimp._Mylast - _Myimp._Myfirst;
+	}
+
+public:
+	void push_back(const value_type& _Val) {
+		if (_Myimp._Mylast == _Myimp._Myend);
+
+		_Myimp.construct(_Myimp._Mylast, _Val);
+		++_Myimp._Mylast;
+	}
 	
-protected:
+private:
 	void _Default_initialization(size_t _Size) {
 		pointer _Current = _Myimp._Myfirst;
-		allocator_type _Alloc = _Getal();
 		try {
 			for (; _Size > 0; --_Size, ++_Current) {
-				_Alloc.construct(IRIS::__addressof(*_Current));
+				_Myimp.construct(IRIS::__addressof(*_Current));
 			}
 		}
 		catch (...) {
-			for (size_t i = 0; i < _Size; ++i, --_Current) {
-				_Alloc.destroy(IRIS::__addressof(*_Current));
+			for (; _Current != _Myimp._Myfirst; --_Current) {
+				_Myimp.destroy(IRIS::__addressof(*_Current));
 			}
 			throw bad_construct();
 		}
 	}
-
-private:
-	
 };
 _IRIS_END_
 #endif // _IRIS_VECTOR_

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="IRIS::vector&lt;*&gt;">
+		<Intrinsic Name="size" Expression="(size_t)(_Myimp._Mylast - _Myimp._Myfirst)" />
+		<Intrinsic Name="capacity" Expression="(size_t)(_Myimp._Myend - _Myimp._Myfirst)" />
+		<DisplayString>{{ size={size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+			<Item Name="[allocator]" ExcludeView="simple">_Myimp</Item>
+			<ArrayItems>
+				<Size>size()</Size>
+				<ValuePointer>_Myimp._Myfirst</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+</AutoVisualizer>

@@ -45,4 +45,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="IRIS_STL.natvis" />
+  </ItemGroup>
 </Project>
