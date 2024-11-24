@@ -1,8 +1,9 @@
 #include <vector.h>
 #include <vector>
-#include<pair.h>
+#include <pair.h>
 #include <utility>
 #include <string>
+#include <iostream>
 
 int main() {
 	{
@@ -23,11 +24,13 @@ int main() {
 		vec2.push_back(false);
 		vec2.push_back(false);
 		vec2.push_back(true);
-	}
-	{
-		std::pair<int, int> _Mypair;
-		IRIS::pair<bool, int> _Mypair2;
-		IRIS::pair<std::string, std::string> pair("hola", "mundo");
+
+		IRIS::pair<int, int> _Mypair(1, 2);
+		IRIS::pair<int, int> _Mypair2(1, 2);
+
+		bool is = (_Mypair == _Mypair2);
+
+		std::cout << vec.front() << '\n';
 	}
 	return 0;
 }

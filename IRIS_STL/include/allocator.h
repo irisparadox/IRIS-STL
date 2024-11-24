@@ -29,6 +29,9 @@ public:
 	allocator() throw() {}
 	allocator(const allocator&) throw() {}
 
+	template <typename _Ty1>
+	allocator(const allocator<_Ty1>&) throw() {}
+
 	~allocator() throw() {}
 
 public:

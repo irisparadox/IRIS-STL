@@ -129,6 +129,23 @@ public:
 	}
 
 public:
+	reference front() {
+		return *_Myimp._Myfirst;
+	}
+
+	const_reference front() const {
+		return *_Myimp._Myfirst;
+	}
+
+	reference back() {
+		return *(_Myimp._Mylast - 1);
+	}
+
+	const_reference back() const {
+		return *(_Myimp._Mylast - 1);
+	}
+
+public:
 	bool empty() const {
 		return _Myimp._Myfirst == _Myimp._Mylast;
 	}

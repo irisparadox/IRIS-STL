@@ -25,8 +25,75 @@ struct pair {
 
 	template <class _U1, class _U2>
 	pair(pair<_U1, _U2>&& _Mypair) : first(IRIS::forward<_U1>(_Mypair.first)), second(IRIS::forward<_U2>(_Mypair.second)) {}
-#endif // __cplusplus >= __CXX11__
 
+	pair& operator=(const pair& _Mypair) {
+		first = _Mypair.first;
+		second = _Mypair.second;
+		return *this;
+	}
+
+	pair& operator=(pair&& _Mypair) {
+		first = IRIS::move(_Mypair.first);
+		second = IRIS::move(_Mypair.second);
+		return *this;
+	}
+
+	template <class _U1, class _U2>
+	pair& operator=(const pair<_U1, _U2>& _Mypair) {
+		first = _Mypair.first;
+		second = _Mypair.second;
+		return *this;
+	}
+
+	template <class _U1, class _U2>
+	pair& operator=(pair<_U1, _U2>&& _Mypair) {
+		first = IRIS::move(_Mypair.first);
+		second = IRIS::move(_Mypair.second);
+		return *this;
+	}
+
+	void swap(pair& _Mypair) {
+		using IRIS::swap;
+		swap(first, _Mypair.first);
+		swap(second, _Mypair.second);
+	}
+#endif // __cplusplus >= __CXX11__
 };
+	template <class _Ty1, class _Ty2>
+	inline _ILIBCXX_CONSTEXPR bool operator==(const pair<_Ty1, _Ty2>& _Left, const pair<_Ty1, _Ty2>& _Right) {
+		return _Left.first == _Right.first && _Left.second == _Right.second;
+	}
+
+	template <class _Ty1, class _Ty2>
+	inline _ILIBCXX_CONSTEXPR bool operator!=(const pair<_Ty1, _Ty2>& _Left, const pair<_Ty1, _Ty2>& _Right) {
+		return !(_Left == _Right);
+	}
+
+	template <class _Ty1, class _Ty2>
+	inline _ILIBCXX_CONSTEXPR bool operator<(const pair<_Ty1, _Ty2>& _Left, const pair<_Ty1, _Ty2>& _Right) {
+		return _Left.first < _Right.first || (!(_Right.first < _Left.first) && _Left.second < _Right.second);
+	}
+
+	template <class _Ty1, class _Ty2>
+	inline _ILIBCXX_CONSTEXPR bool operator>(const pair<_Ty1, _Ty2>& _Left, const pair<_Ty1, _Ty2>& _Right) {
+		return _Right < _Left;
+	}
+
+	template <class _Ty1, class _Ty2>
+	inline _ILIBCXX_CONSTEXPR bool operator<=(const pair<_Ty1, _Ty2>& _Left, const pair<_Ty1, _Ty2>& _Right) {
+		return !(_Right < _Left);
+	}
+
+	template <class _Ty1, class _Ty2>
+	inline _ILIBCXX_CONSTEXPR bool operator>=(const pair<_Ty1, _Ty2>& _Left, const pair<_Ty1, _Ty2>& _Right) {
+		return !(_Left < _Right);
+	}
+
+#if __CXX_HASCXX0X__
+	template <class _Ty1, class _Ty2>
+	inline void swap(pair<_Ty1, _Ty2>& _Left, pair<_Ty1, _Ty2>& _Right) {
+		_Left.swap(_Right);
+	}
+#endif
 _IRIS_END_
 #endif // _IRIS_PAIR_
