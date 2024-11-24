@@ -1,6 +1,8 @@
 #ifndef _IRIS_CXX_CONFIG_
 #define _IRIS_CXX_CONFIG_
 
+#include <common_types.h>
+
 // Current C++ lib version in ISO date format
 #define __ILIBCXX__ 20241122
 
@@ -33,8 +35,8 @@
 #define _IRIS_END_ }
 
 _IRIS_BEGIN_
-typedef unsigned __int64 size_t;
-typedef __int64			 ptrdiff_t;
+typedef uint64 size_t;
+typedef int64  ptrdiff_t;
 _IRIS_END_
 
 #endif // _CXX_CONFIG_

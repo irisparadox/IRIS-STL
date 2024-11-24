@@ -175,13 +175,13 @@ public:
 	typedef _Al allocator_type;
 
 	_Vector_base() : _Myimp() {}
-	_Vector_base(const allocator_type& _Alloc) : _Myimp(_Alloc) {}
+	_Vector_base(const allocator_type& _A) : _Myimp(_A) {}
 	_Vector_base(size_t _Size) : _Myimp() {
 		_Myimp._Myfirst = _Alloc(_Size);
 		_Myimp._Mylast  = _Myimp._Myfirst;
 		_Myimp._Myend	= _Myimp._Myfirst + _Size;
 	}
-	_Vector_base(size_t _Size, const allocator_type& _Alloc) : _Myimp(_Alloc) {
+	_Vector_base(size_t _Size, const allocator_type& _A) : _Myimp(_A) {
 		_Myimp._Myfirst = _Alloc(_Size);
 		_Myimp._Mylast = _Myimp._Myfirst;
 		_Myimp._Myend = _Myimp._Myfirst + _Size;
@@ -252,17 +252,39 @@ public:
 
 	/**
 	*   @brief Constructor of vector with no elements, given an allocator.
-	*	@param _Alloc An allocator object.
+	*	@param A An allocator object.
 	*/
-	explicit vector(const allocator_type& _Alloc) : _Mybase(_Alloc) {}
+	explicit vector(const allocator_type& _A) : _Mybase(_A) {}
 
+#if __CXX_HASCXX0X__
 	/**
 	*   @brief Constructor of vector with no elements, given an initial size.
-	*	@param _Size Vector initial size.
+	*	@param N Vector initial size.
 	*/
-	explicit vector(size_type _Size) : _Mybase(_Size) {
-		_Default_initialization(_Size);
+	explicit vector(size_type _N) : _Mybase(_N) {
+		_Default_initialization(_N);
 	}
+
+	/**
+	*	@brief Constructor of vector with a default value.
+	*	@param N   Vector initial size.
+	*	@param val The default value.
+	*	@param A   An allocator object.
+	*/
+	explicit vector(size_type _N, const value_type& _Val, const allocator_type& _A = allocator_type())
+		: _Mybase(_N, _A)
+	{ _Fill_initialization(_N, _Val); }
+#else
+	/**
+	*	@brief Constructor of vector with a default value.
+	*	@param N   Vector initial size.
+	*	@param val The default value.
+	*	@param A   An allocator object.
+	*/
+	explicit vector(size_type _N, const value_type& _Val = value_type(), const allocator_type& _A = allocator_type())
+		: _Mybase(_N, _A)
+	{ _Fill_initialization(_N, _Val); }
+#endif // _CXX_HASCXX0X__
 
 	~vector() {
 		_Destroy();
@@ -375,6 +397,26 @@ private:
 	}
 	
 private:
+	void _Fill_initialization(size_type _Size, const value_type& _Val) {
+		_Default_fill_initialization(_Size,_Val);
+		_Myimp._Mylast = _Myimp._Myend;
+	}
+
+	void _Default_fill_initialization(size_type _Size, const value_type& _Val) {
+		pointer _Current = _Myimp._Myfirst;
+		try {
+			for (; _Size > 0; --_Size, ++_Current) {
+				_Myimp.construct(IRIS::__addressof(*_Current), _Val);
+			}
+		}
+		catch (...) {
+			for (; _Current >= _Myimp._Myfirst; --_Current) {
+				_Myimp.destroy(IRIS::__addressof(*_Current));
+			}
+			_Econstruct_();
+		}
+	}
+
 	void _Default_initialization(size_type _Size) {
 		pointer _Current = _Myimp._Myfirst;
 		try {

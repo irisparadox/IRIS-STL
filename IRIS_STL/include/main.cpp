@@ -4,6 +4,7 @@
 #include <utility>
 #include <string>
 #include <iostream>
+#include <hash.h>
 
 int main() {
 	{
@@ -37,6 +38,18 @@ int main() {
 		vec.pop_back();
 
 		IRIS::vector<int>::iterator it = vec.begin();
+
+		it++;
+
+		IRIS::vector<const char*> vec3(10, "abc");
+	}
+	{
+		int inputInt = 42;
+		long long hashInt = IRIS::XXH64(inputInt);
+		int input2 = 43;
+		long long hashInt1 = IRIS::XXH64(input2);
+
+		if (hashInt == hashInt1) return -1;
 	}
 	return 0;
 }
