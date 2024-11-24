@@ -147,13 +147,14 @@
     <ClInclude Include="include\move.h" />
     <ClInclude Include="include\pair.h" />
     <ClInclude Include="include\type_traits.h" />
+    <ClInclude Include="include\unordered_map.h" />
     <ClInclude Include="include\vector.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\main.cpp" />
+    <Natvis Include="IRIS_STL.natvis" />
   </ItemGroup>
   <ItemGroup>
-    <Natvis Include="IRIS_STL.natvis" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
