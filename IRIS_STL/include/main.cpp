@@ -31,6 +31,12 @@ int main() {
 		bool is = (_Mypair == _Mypair2);
 
 		std::cout << vec.front() << '\n';
+
+		std::cout << vec[5] << '\n';
+
+		vec.pop_back();
+
+		IRIS::vector<int>::iterator it = vec.begin();
 	}
 	return 0;
 }

@@ -10,7 +10,7 @@ public:
 	bad_construct() throw() {}
 	~bad_construct() throw() {}
 
-	const char* what() const throw() { return "bad object construct"; }
+	const char* what() const throw() { return "bad object construct in IRIS::vector"; }
 };
 
 class length_error : public exception {
@@ -18,10 +18,147 @@ public:
 	length_error() throw() {}
 	~length_error() throw() {}
 	
-	const char* what() const throw() { return "specified length is over the limit"; }
+	const char* what() const throw() { return "specified length is over the limit in IRIS::vector"; }
 };
 
-template<typename _Ty, typename _Al>
+class out_of_range : public exception {
+public:
+	out_of_range() throw() {}
+	~out_of_range() throw() {}
+
+	const char* what() const throw() { return "specified index is out of range in IRIS::vector"; }
+};
+
+template <typename _Ty>
+class _Vector_const_iterator {
+public:
+	using value_type	  = _Ty;
+	using const_pointer	  = const _Ty*;
+	using const_reference = const _Ty&;
+	using size_type		  = size_t;
+	using difference_type = ptrdiff_t;
+
+	_Vector_const_iterator() throw() : _Ptr(), _Idx() {}
+	explicit _Vector_const_iterator(const_pointer _Pvec, difference_type _Off = 0) throw() : _Ptr(_Pvec), _Idx(_Off) {}
+
+public:
+	_ILIBCXX_CONSTEXPR const_reference operator*() const throw() {
+		return *operator->();
+	}
+
+	_ILIBCXX_CONSTEXPR const_pointer operator->() const throw() {
+		return _Ptr + _Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_const_iterator& operator++() throw() {
+		++_Idx;
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_const_iterator operator++(int) throw() {
+		_Vector_const_iterator _Tmp = *this;
+		++*this;
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_const_iterator& operator--() throw() {
+		--_Idx;
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_const_iterator operator--(int) throw() {
+		_Vector_const_iterator _Tmp = *this;
+		--*this;
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator==(const _Vector_const_iterator& _Right) const throw() {
+		return _Idx == _Right._Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator!=(const _Vector_const_iterator& _Right) const throw() {
+		return _Idx != _Right._Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator<(const _Vector_const_iterator& _Right) const throw() {
+		return _Idx < _Right._Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator>(const _Vector_const_iterator& _Right) const throw() {
+		return _Idx > _Right._Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator<=(const _Vector_const_iterator& _Right) const throw() {
+		return _Idx <= _Right._Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator>=(const _Vector_const_iterator& _Right) const throw() {
+		return _Idx >= _Right._Idx;
+	}
+
+	_ILIBCXX_CONSTEXPR const_reference operator[](const difference_type _Off) const throw() {
+		return *(*this + _Off);
+	}
+
+protected:
+	const_pointer _Ptr;
+	difference_type _Idx;
+};
+
+template <typename _Ty>
+class _Vector_iterator : public _Vector_const_iterator<_Ty> {
+public:
+	using _Mybase = _Vector_const_iterator<_Ty>;
+
+	using pointer	      = _Ty*;
+	using reference		  = _Ty&;
+	using size_type		  = size_t;
+	using difference_type = ptrdiff_t;
+
+	_Vector_iterator() throw() : _Ptr(), _Idx() {}
+	explicit _Vector_iterator(pointer _Pvec, difference_type _Off) throw() : _Mybase(_Pvec, _Off) {}
+
+protected:
+	using _Mybase::_Ptr;
+	using _Mybase::_Idx;
+
+public:
+	_ILIBCXX_CONSTEXPR reference operator*() const throw() {
+		return const_cast<reference>(_Mybase::operator*());
+	}
+
+	_ILIBCXX_CONSTEXPR pointer operator->() const throw() {
+		return this->_Ptr;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_iterator& operator++() throw() {
+		_Mybase::operator++();
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_iterator operator++(int) throw() {
+		_Vector_iterator _Tmp = *this;
+		_Mybase::operator++();
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_iterator& operator--() throw() {
+		_Mybase::operator--();
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Vector_iterator operator-(int) throw() {
+		_Vector_iterator _Tmp = *this;
+		_Mybase::operator--();
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR reference operator[](const difference_type _Off) const throw() {
+		return const_cast<reference>(_Mybase::operator[](_Off));
+	}
+};
+
+template <typename _Ty, typename _Al>
 struct _Vector_base {
 	typedef typename _Al::template rebind<_Ty>::other _Myal_type;
 
@@ -96,6 +233,9 @@ public:
 	using const_reference = const _Ty&;
 	using allocator_type  = _Al;
 
+	using const_iterator = _Vector_const_iterator<_Ty>;
+	using iterator		 = _Vector_iterator<_Ty>;
+
 protected:
 	using _Mybase::_Alloc;
 	using _Mybase::_Dealloc;
@@ -129,6 +269,23 @@ public:
 	}
 
 public:
+	iterator begin() throw() {
+		return iterator(_Myimp._Myfirst, 0);
+	}
+
+	iterator end() throw() {
+		return iterator(_Myimp._Mylast, size());
+	}
+
+	const_iterator cbegin() throw() {
+		return const_iterator(_Myimp._Myfirst, 0);
+	}
+
+	const_iterator cend() throw() {
+		return const_iterator(_Myimp._Mylast, size());
+	}
+
+public:
 	reference front() {
 		return *_Myimp._Myfirst;
 	}
@@ -145,20 +302,39 @@ public:
 		return *(_Myimp._Mylast - 1);
 	}
 
+	reference at(size_type _Idx) {
+		_Range_check(_Idx);
+		return (*this)[_Idx];
+	}
+
+	const_reference at(size_type _Idx) const {
+		_Range_check(_Idx);
+		return (*this)[_Idx];
+	}
+
+public:
+	reference operator[](size_type _Idx) {
+		return *(_Myimp._Myfirst + _Idx);
+	}
+
+	const_reference operator[](size_type _Idx) const {
+		return *(_Myimp._Myfirst + _Idx);
+	}
+
 public:
 	bool empty() const {
 		return _Myimp._Myfirst == _Myimp._Mylast;
 	}
 
-	size_t size() const {
+	size_type size() const {
 		return _Myimp._Mylast - _Myimp._Myfirst;
 	}
 	
-	size_t max_size() const {
+	size_type max_size() const {
 		return _Myimp.max_size();
 	}
 
-	void reserve(size_t _Size) {
+	void reserve(size_type _Size) {
 		if (_Size > max_size()) _Elength_();
 		if (_Size < capacity()) return;
 
@@ -171,7 +347,7 @@ public:
 		_Myimp._Myend	= _Myimp._Myfirst + _Size;
 	}
 
-	size_t capacity() const {
+	size_type capacity() const {
 		return _Myimp._Myend - _Myimp._Myfirst;
 	}
 
@@ -183,14 +359,23 @@ public:
 		++_Myimp._Mylast;
 	}
 
+	void pop_back() {
+		--_Myimp._Mylast;
+		_Myimp.destroy(_Myimp._Mylast);
+	}
+
 private:
-	size_t _New_capacity() {
-		size_t _old = capacity();
+	size_type _New_capacity() {
+		size_type _old = capacity();
 		return (_old > 1) ? _old + (_old / 2) : ++_old;
+	}
+
+	void _Range_check(size_type _Idx) const {
+		if (_Idx >= size()) throw out_of_range();
 	}
 	
 private:
-	void _Default_initialization(size_t _Size) {
+	void _Default_initialization(size_type _Size) {
 		pointer _Current = _Myimp._Myfirst;
 		try {
 			for (; _Size > 0; --_Size, ++_Current) {
@@ -205,7 +390,7 @@ private:
 		}
 	}
 
-	pointer _Allocate_and_copy(size_t _Size, pointer _First, pointer _Last) {
+	pointer _Allocate_and_copy(size_type _Size, pointer _First, pointer _Last) {
 		pointer _result = _Myimp.allocate(_Size);
 		pointer _Current = _result;
 		try {

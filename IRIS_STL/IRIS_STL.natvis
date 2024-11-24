@@ -16,6 +16,33 @@
 		</Expand>
 	</Type>
 
+	<!-- VECTOR CONST ITERATOR VISUALIZER -->
+	<Type Name="IRIS::_Vector_const_iterator&lt;*&gt;">
+		<Intrinsic Name="pointer" Expression="_Ptr" />
+		<Intrinsic Name="index" Expression="_Idx" />
+		<Intrinsic Name="value" Expression="*(_Ptr + _Idx)" />
+		<DisplayString>{{ current={value()} }}</DisplayString>
+		<Expand>
+			<Item Name="[pointer]" ExcludeView="simple">pointer()</Item>
+			<Item Name="[index]" ExcludeView="simple">index()</Item>
+			<Item Name="[value]" ExcludeView="simple">value()</Item>
+		</Expand>
+	</Type>
+
+	<!-- VECTOR ITERATOR VISUALIZER -->
+	<Type Name="IRIS::_Vector_iterator&lt;*&gt;">
+		<Intrinsic Name="pointer" Expression="_Ptr" />
+		<Intrinsic Name="index" Expression="_Idx" />
+		<Intrinsic Name="value" Expression="*(_Ptr + _Idx)" />
+		<DisplayString>{{ current={value()} }}</DisplayString>
+		<Expand>
+			<Item Name="[pointer]" ExcludeView="simple">pointer()</Item>
+			<Item Name="[index]" ExcludeView="simple">index()</Item>
+			<Item Name="[value]" ExcludeView="simple">value()</Item>
+		</Expand>
+	</Type>
+
+	<!-- PAIR VISUALIZER -->
 	<Type Name="IRIS::pair&lt;*&gt;">
 		<DisplayString IncludeView="noparens">{first}, {second}</DisplayString>
 		<DisplayString ExcludeView="noparens">({first}, {second})</DisplayString>
