@@ -112,6 +112,14 @@ protected:
 
 	_List_imp _Myimp;
 
+	_Nodeptr get_node() {
+		return _Myimp._Node_alloc_type::allocate(1);
+	}
+
+	void del_node(_Nodeptr _Pnode) {
+		_Myimp._Node_alloc_type::deallocate(_Pnode, 1);
+	}
+
 public:
 	typedef _Al allocator_type;
 
@@ -148,7 +156,8 @@ public:
 
 	~_List_base() {
 		_Node::_Freenonhead(_Getnodal(), _Myimp._Myhead);
-		_Node::_Freenode(_Getnodal(), _Myimp._Myhead);
+		_Node::_Freenode0(_Getnodal(), _Myimp._Myhead);
+		_Myimp._Myhead = nullptr;
 		_Myimp._Mysize = 0;
 	}
 
@@ -176,6 +185,10 @@ public:
 
 protected:
 	using _Mybase::_Myimp;
+	using _Mybase::get_node;
+	using _Mybase::del_node;
+	using _Mybase::_Getnodal;
+	using _Mybase::_Getyal;
 	using _Node	= _Node<_Ty>;
 	typedef typename _Node::_Nodeptr _Nodeptr;
 
@@ -208,30 +221,56 @@ public:
 	}
 
 public:
+	void push_front(const value_type& _Val) {
+		_Nodeptr _Tmp = _create_node(_Val);
+		_Tmp->_hook(_Myimp._Myhead->_Next);
+		++_Myimp._Mysize;
+	}
+
+	void push_front(value_type&& _Val) {
+		_Nodeptr _Tmp = _create_node(IRIS::move(_Val));
+		_Tmp->_hook(_Myimp._Myhead->_Next);
+		++_Myimp._Mysize;
+	}
+
 	void push_back(const value_type& _Val) {
-		_Nodeptr _newnode = _Myimp.allocate(1);
-		_Myimp.construct_in_place(_newnode->_Myval, _Val);
-		_place_back(_newnode);
+		_Nodeptr _Tmp = _create_node(_Val);
+		_Tmp->_hook(_Myimp._Myhead);
+		++_Myimp._Mysize;
+	}
+
+	void push_back(value_type&& _Val) {
+		_Nodeptr _Tmp = _create_node(IRIS::move(_Val));
+		_Tmp->_hook(_Myimp._Myhead);
 		++_Myimp._Mysize;
 	}
 
 private:
-	void _emplace_empty(_Nodeptr _Pnode) {
-		_Myimp._Myhead->_Next = _Pnode;
-		_Myimp._Myhead->_Prev = _Pnode;
-		_Pnode->_Next = _Myimp._Myhead;
-		_Pnode->_Prev = _Myimp._Myhead;
-	}
 
-	void _place_back(_Nodeptr _Pnode) {
-		if (empty()) _emplace_empty(_Pnode);
-		else {
-			_Pnode->_Prev = _Myimp._Myhead->_Prev;
-			_Pnode->_Next = _Myimp._Myhead;
-			_Myimp._Myhead->_Prev->_Next = _Pnode;
-			_Myimp._Myhead->_Prev = _Pnode;
+#if __CXX_HASCXX0X__
+	template <typename... _Types>
+	_Nodeptr _create_node(_Types&&... _Args) {
+		_Nodeptr _newnode = get_node();
+		try {
+			_Getnodal().construct(_newnode, IRIS::forward<_Types>(_Args)...);
 		}
+		catch (...) {
+			del_node(_newnode);
+		}
+		return _newnode;
 	}
+#else
+	_Nodeptr _create_node(const value_type& _Val) {
+		_Nodeptr _newnode = get_node();
+		try {
+			_Getyal().construct(IRIS::__addressof(_newnode->_Myval), _Val);
+		}
+		catch (...) {
+			del_node(_newnode);
+		}
+		return _newnode;
+	}
+#endif // __CXX_HASCXX0X__
 };
 _IRIS_END_
 #endif // _IRIS_LIST_

@@ -286,6 +286,10 @@ public:
 	{ _Fill_initialization(_N, _Val); }
 #endif // _CXX_HASCXX0X__
 
+	vector(const vector& _Right) : _Mybase(_Right.size(), _Right._Getal_type()) {
+		_Myimp._Mylast = _uninitialized_copy(_Right._Myimp._Myfirst, _Right._Myimp._Mylast, _Myimp._Myfirst);
+	}
+
 	~vector() {
 		_Destroy();
 	}
@@ -434,12 +438,17 @@ private:
 
 	pointer _Allocate_and_copy(size_type _Size, pointer _First, pointer _Last) {
 		pointer _result = _Myimp.allocate(_Size);
+		_uninitialized_copy(_First, _Last, _result);
+		return _result;
+	}
+
+	pointer _uninitialized_copy(pointer _First, pointer _Last, pointer _result) {
 		pointer _Current = _result;
 		try {
 			for (; _First != _Last; ++_First, ++_Current) {
 				_Myimp.construct(IRIS::__addressof(*_Current), *_First);
 			}
-			return _result;
+			return _Current;
 		}
 		catch (...) {
 			for (; _Current >= _result; --_Current) {

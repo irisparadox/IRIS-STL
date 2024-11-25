@@ -10,6 +10,14 @@
 
 int main() {
 	{
+		std::list<std::vector<int>> stdListVec;
+		std::vector<int> stdvec = { 1, 2, 3 };
+		stdvec.push_back(4);
+		stdvec.push_back(5);
+
+		stdListVec.push_front(stdvec);
+	}
+	{
 		IRIS::vector<int> vec;
 		vec.push_back(16);
 		vec.push_back(32);
@@ -44,15 +52,17 @@ int main() {
 		it++;
 
 		IRIS::vector<const char*> vec3(10, "abc");
-	}
-	{
+
 		IRIS::list<int> list;
-		std::list<int> list2;
+		IRIS::list<IRIS::vector<int>> listVec;
 
 		list.push_back(5);
-		list2.push_back(5);
+		list.push_front(10);
+		list.push_back(20);
+		list.push_front(30);
 
-		while (1);
+		listVec.push_front(vec);
+		
 	}
 	{
 		int inputInt = 42;
