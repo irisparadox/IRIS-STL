@@ -208,6 +208,23 @@ public:
 	~list() {}
 
 public:
+	reference front() {
+		return _Myimp._Myhead->_Next->_Myval;
+	}
+
+	const_reference front() const {
+		return _Myimp._Myhead->_Next->_Myval;
+	}
+
+	reference back() {
+		return _Myimp._Myhead->_Prev->_Myval;
+	}
+
+	const_reference back() const {
+		return _Myimp._Myhead->_Prev->_Myval;
+	}
+
+public:
 	_ILIBCXX_CONSTEXPR bool empty() const {
 		return _Myimp._Mysize == 0;
 	}

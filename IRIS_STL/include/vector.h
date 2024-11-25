@@ -187,6 +187,19 @@ public:
 		_Myimp._Myend = _Myimp._Myfirst + _Size;
 	}
 
+#if __CXX_HASCXX0X__
+	_Vector_base(_Vector_base&& _Right) : _Myimp(_Right._Getal_type()) {
+		_Myimp._Myfirst = _Right._Myimp._Myfirst;
+		_Myimp._Mylast  = _Right._Myimp._Mylast;
+		_Myimp._Myend	= _Right._Myimp._Myend;
+
+		_Right._Myimp._Myfirst = nullptr;
+		_Right._Myimp._Mylast  = nullptr;
+		_Right._Myimp._Myend   = nullptr;
+	}
+#endif // __CXX_HASCXX0X__
+
+
 	~_Vector_base() {
 		_Dealloc(_Myimp._Myfirst, _Myimp._Myend - _Myimp._Myfirst);
 	}
@@ -286,9 +299,20 @@ public:
 	{ _Fill_initialization(_N, _Val); }
 #endif // _CXX_HASCXX0X__
 
+	/**
+	*	@brief Copy constructor of vector.
+	*	@param Right A vector matching element and allocator types.
+	*/
 	vector(const vector& _Right) : _Mybase(_Right.size(), _Right._Getal_type()) {
 		_Myimp._Mylast = _uninitialized_copy(_Right._Myimp._Myfirst, _Right._Myimp._Mylast, _Myimp._Myfirst);
 	}
+
+
+	/**
+	*	@brief Move constructor of vector.
+	*	@param Right A vector matching element and allocator types.
+	*/
+	vector(vector&& _Right) : _Mybase(IRIS::move(_Right)) {}
 
 	~vector() {
 		_Destroy();

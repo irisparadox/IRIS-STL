@@ -63,6 +63,12 @@ int main() {
 
 		listVec.push_front(vec);
 		
+		list.front();
+		list.back();
+
+		IRIS::vector<int> movevec(IRIS::move(vec));
+
+		vec.push_back(10);
 	}
 	{
 		int inputInt = 42;
