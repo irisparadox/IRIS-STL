@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <hash.h>
+#include <list>
+#include <list.h>
 
 int main() {
 	{
@@ -42,6 +44,15 @@ int main() {
 		it++;
 
 		IRIS::vector<const char*> vec3(10, "abc");
+	}
+	{
+		IRIS::list<int> list;
+		std::list<int> list2;
+
+		list.push_back(5);
+		list2.push_back(5);
+
+		while (1);
 	}
 	{
 		int inputInt = 42;

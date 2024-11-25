@@ -66,8 +66,18 @@ public:
 		::new((void*)_Ptr) _Ty(IRIS::forward<_Args>(_Myargs)...);
 	}
 
+	template <typename _Ty, typename... _Types>
+	void construct_in_place(_Ty& _Obj, _Types&&... _Args) {
+		::new (static_cast<void*>(IRIS::__addressof(_Obj))) _Ty(IRIS::forward<_Types>(_Args)...);
+	}
+
 	void destroy(pointer _Ptr) {
 		_Ptr->~_Ty();
+	}
+
+	template <typename _Ty>
+	void destroy_in_place(_Ty& _Obj) {
+		_Obj.~_Ty();
 	}
 };
 _IRIS_END_

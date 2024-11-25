@@ -42,6 +42,20 @@
 		</Expand>
 	</Type>
 
+	<!-- LIST VISUALIZER -->
+	<Type Name="IRIS::list&lt;*&gt;">
+		<DisplayString>{{ size={_Myimp._Mysize} }}</DisplayString>
+		<Expand>
+			<Item Name="[allocator]" ExcludeView="simple">_Myimp</Item>
+			<LinkedListItems>
+				<Size>_Myimp._Mysize</Size>
+				<HeadPointer>_Myimp._Myhead-&gt;_Next</HeadPointer>
+				<NextPointer>_Next</NextPointer>
+				<ValueNode>_Myval</ValueNode>
+			</LinkedListItems>
+		</Expand>
+	</Type>
+
 	<!-- PAIR VISUALIZER -->
 	<Type Name="IRIS::pair&lt;*&gt;">
 		<DisplayString IncludeView="noparens">{first}, {second}</DisplayString>
