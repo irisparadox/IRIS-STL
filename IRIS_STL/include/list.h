@@ -2,6 +2,7 @@
 #define _IRIS_LIST_
 
 #include <cxx_config.h>
+#include <initializer_list>
 #include <allocator.h>
 
 _IRIS_BEGIN_
@@ -205,6 +206,33 @@ public:
 	*/
 	explicit list(const allocator_type& _A) : _Mybase(_A) {}
 
+	/**
+	*	@brief The copy constructor of list.
+	*	@param Right A list matching both element and allocator types.
+	*/
+	list(const list& _Right) : _Mybase(_Right._Getnodal()) {
+		_initialize_dispatch(_Right._Myimp._Myhead->_Next, _Right._Myimp._Myhead);
+	}
+
+	/**
+	*	@brief Creates a list given an initializer list.
+	*	@param L An initializer list matching element type.
+	*	@param A An allocator object.
+	*/
+	list(std::initializer_list<value_type> _L, const allocator_type& _A = allocator_type()) : _Mybase(_A) {
+		assign(_L);
+	}
+
+	list& operator=(std::initializer_list<value_type> _L) {
+		assign(_L);
+	}
+
+	void assign(std::initializer_list<value_type>& _L) {
+		for (auto val : _L) {
+			push_back(val);
+		}
+	}
+
 	~list() {}
 
 public:
@@ -244,22 +272,51 @@ public:
 		++_Myimp._Mysize;
 	}
 
+#if __CXX_HASCXX0X__
 	void push_front(value_type&& _Val) {
 		_Nodeptr _Tmp = _create_node(IRIS::move(_Val));
 		_Tmp->_hook(_Myimp._Myhead->_Next);
 		++_Myimp._Mysize;
 	}
+#endif // __CXX_HASCXX0X__
 
 	void push_back(const value_type& _Val) {
 		_Nodeptr _Tmp = _create_node(_Val);
 		_Tmp->_hook(_Myimp._Myhead);
 		++_Myimp._Mysize;
 	}
-
+#if __CXX_HASCXX0X__
 	void push_back(value_type&& _Val) {
 		_Nodeptr _Tmp = _create_node(IRIS::move(_Val));
 		_Tmp->_hook(_Myimp._Myhead);
 		++_Myimp._Mysize;
+	}
+#endif // __CXX_HASCXX0X__
+
+	void pop_back() {
+		_Nodeptr _node_to_delete = _Myimp._Myhead->_Prev;
+		_node_to_delete->_unhook();
+#if __CXX_HASCXX0X__
+		_Getnodal().destroy(_node_to_delete);
+#else
+		_Getyal().destroy(IRIS::__addressof(_node_to_delete->_Myval));
+#endif // __CXX_HASCXX0X__
+
+		del_node(_node_to_delete);
+		--_Myimp._Mysize;
+	}
+
+	void pop_front() {
+		_Nodeptr _node_to_delete = _Myimp._Myhead->_Next;
+		_node_to_delete->_unhook();
+#if __CXX_HASCXX0X__
+		_Getnodal().destroy(_node_to_delete);
+#else
+		_Getyal().destroy(IRIS::__addressof(_node_to_delete->_Myval));
+#endif // __CXX_HASCXX0X__
+		
+		del_node(_node_to_delete);
+		--_Myimp._Mysize;
 	}
 
 private:
@@ -288,6 +345,12 @@ private:
 		return _newnode;
 	}
 #endif // __CXX_HASCXX0X__
+
+	void _initialize_dispatch(_Nodeptr _first, _Nodeptr _last) {
+		for (; _first != _last; _first = _first->_Next) {
+			push_back(_first->_Myval);
+		}
+	}
 };
 _IRIS_END_
 #endif // _IRIS_LIST_

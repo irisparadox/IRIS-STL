@@ -2,6 +2,7 @@
 #define _IRIS_VECTOR_
 
 #include <cxx_config.h>
+#include <initializer_list>
 #include <allocator.h>
 
 _IRIS_BEGIN_
@@ -312,7 +313,23 @@ public:
 	*	@brief Move constructor of vector.
 	*	@param Right A vector matching element and allocator types.
 	*/
-	vector(vector&& _Right) : _Mybase(IRIS::move(_Right)) {}
+	vector(vector&& _Right) throw() : _Mybase(IRIS::move(_Right)) {}
+
+
+	/**
+	*	@brief Creates a vector given an initializer list.
+	*	@param L An initializer list matching element type.
+	*	@param A An allocator object.
+	*/
+	vector(std::initializer_list<value_type> _L, const allocator_type& _A) : _Mybase(_A) {
+		assign(_L);
+	}
+
+	void assign(std::initializer_list<value_type>& _L) {
+		for (auto val : _L) {
+			push_back(val);
+		}
+	}
 
 	~vector() {
 		_Destroy();
@@ -408,6 +425,15 @@ public:
 		_Myimp.construct(_Myimp._Mylast, _Val);
 		++_Myimp._Mylast;
 	}
+
+#if __CXX_HASCXX0X__
+	void push_back(value_type&& _Val) {
+		if (_Myimp._Mylast == _Myimp._Myend) reserve(_New_capacity());
+
+		_Myimp.construct(_Myimp._Mylast, IRIS::move(_Val));
+		++_Myimp._Mylast;
+	}
+#endif // __CXX_HASCXX0X__
 
 	void pop_back() {
 		--_Myimp._Mylast;

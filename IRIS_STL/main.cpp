@@ -10,6 +10,14 @@
 
 int main() {
 	{
+		IRIS::list<IRIS::list<int>> lists;
+		IRIS::list<int> list = { 1, 2, 3 };
+
+		lists.push_back(list);
+
+		list.pop_back();
+	}
+	{
 		std::list<std::vector<int>> stdListVec;
 		std::vector<int> stdvec = { 1, 2, 3 };
 		stdvec.push_back(4);
