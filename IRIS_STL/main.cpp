@@ -14,6 +14,11 @@ int main() {
 	{
 		iris::unordered_map<int, int> map;
 		map.insert({ 1, 2 });
+		map.insert({ 2, 2 });
+		map.insert({ 5, 10 });
+		map.insert({ 24, 1 });
+		map.insert({ 643, 10 });
+		map.insert({ 1024, 8 });
 	}
 	{
 		iris::list<int> list = { 1, 2, 3 };

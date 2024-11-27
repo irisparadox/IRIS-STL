@@ -324,6 +324,12 @@ public:
 		assign(_L);
 	}
 
+	vector& operator=(vector&& _Right) {
+		clear();
+		swap(_Right);
+		return *this;
+	}
+
 	vector& operator=(std::initializer_list<value_type> _L) {
 		assign(_L);
 		return *this;
@@ -423,6 +429,10 @@ public:
 		else if (_Size < size()) _erase(size() - _Size);
 	}
 
+	void clear() {
+		_erase(size());
+	}
+
 	size_type capacity() const {
 		return _Myimp._Myend - _Myimp._Myfirst;
 	}
@@ -447,6 +457,15 @@ public:
 	void pop_back() {
 		--_Myimp._Mylast;
 		_Myimp.destroy(_Myimp._Mylast);
+	}
+
+public:
+	void swap(vector& _Right) {
+		iris::swap(_Myimp._Myfirst, _Right._Myimp._Myfirst);
+		iris::swap(_Myimp._Mylast, _Right._Myimp._Mylast);
+		iris::swap(_Myimp._Myend, _Right._Myimp._Myend);
+
+		iris::__alloc_swap<_Ty_al_type>::_S_do_it(_Getal_type(), _Right._Getal_type());
 	}
 
 private:
@@ -493,6 +512,7 @@ private:
 			}
 			_Econstruct_();
 		}
+		_Myimp._Mylast = _Myimp._Myend;
 	}
 
 	void _Default_append(size_type _Size) {

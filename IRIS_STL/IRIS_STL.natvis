@@ -68,6 +68,18 @@
 			<Item Name="[value]" ExcludeView="simple">value()</Item>
 		</Expand>
 	</Type>
+	
+	<!-- UNORDERED MAP VISUALIZER -->
+	<Type Name="iris::unordered_map&lt;*&gt;" Priority="Medium">
+		<Intrinsic Name="table_size" Expression="_Myimp._Mysize" />
+		<DisplayString>{{ table_size = {table_size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[bucket_count]" ExcludeView="simple">_Myimp._Mysize</Item>
+			<Item Name="[load_factor]" ExcludeView="simple">((float)_Myimp._Mysize) / ((float) _Myimp._Maxidx)</Item>
+			<Item Name="[allocator]" ExcludeView="simple">_Myimp</Item>
+			<ExpandedItem>_Myimp._Mytable,view(simple)</ExpandedItem>
+		</Expand>
+	</Type>
 
 	<!-- PAIR VISUALIZER -->
 	<Type Name="iris::pair&lt;*&gt;">

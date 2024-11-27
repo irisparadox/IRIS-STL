@@ -19,16 +19,46 @@ protected:
 
 	struct _hashtable_imp : public _Bucket_alloc_type {
 		_Mytable_type _Mytable;
+		size_t		  _Maxidx;
+		size_t		  _Mysize;
 
-		_hashtable_imp() : _Bucket_alloc_type(), _Mytable() {
+		_hashtable_imp() : _Bucket_alloc_type(), _Mytable(), _Mysize(0), _Maxidx(1) {
 			_Mytable.resize(1);
 		}
-		_hashtable_imp(const _Bucket_alloc_type& _A) : _Bucket_alloc_type(_A), _Mytable() {
+		_hashtable_imp(const _Bucket_alloc_type& _A) : _Bucket_alloc_type(_A), _Mytable(), _Mysize(0), _Maxidx(1) {
 			_Mytable.resize(1);
 		}
 	};
 
 	_hashtable_imp _Myimp;
+
+	const float _MAX_LOAD = 0.75f;
+
+	float _load() const {
+		return static_cast<float>(_Myimp._Mysize) / _Myimp._Mytable.size();
+	}
+
+	void _rehash() {
+		_Mytable_type new_table(_Myimp._Mytable.size());
+
+		for (auto& bucket : _Myimp._Mytable) {
+			for (auto& pair : bucket) {
+				size_t hashed_key = iris::XXH64(pair.first) % new_table.size();
+				new_table[hashed_key].push_back(pair);
+			}
+		}
+
+		_Myimp._Mytable = iris::move(new_table);
+	}
+
+	void _resize() {
+		size_t _new_size = _Myimp._Mytable.size();
+		_new_size = _new_size > 1 ? _new_size + (_new_size / 2) : ++_new_size;
+
+		_Myimp._Mytable.resize(_new_size);
+		_Myimp._Maxidx = _new_size;
+		_rehash();
+	}
 
 public:
 	using allocator_type = _Al;
@@ -38,9 +68,10 @@ public:
 
 public:
 	void bucket_insert(const _Mypair_type& _Mypair) {
-		const unsigned long long hashed_key = iris::XXH64(_Mypair.first) % _Myimp._Mytable.size();
+		if (_load() > _MAX_LOAD) _resize();
 
-		if (hashed_key >= _Myimp._Mytable.size()) _Myimp._Mytable.resize(hashed_key + 1);
+		const size_t hashed_key = iris::XXH64(_Mypair.first) % _Myimp._Mytable.size();
+
 		_Mybucket_type& bucket = _Myimp._Mytable[hashed_key];
 
 		for (auto& pair : bucket) {
@@ -51,6 +82,7 @@ public:
 		}
 
 		bucket.push_back(_Mypair);
+		++_Myimp._Mysize;
 	}
 };
 
@@ -75,6 +107,7 @@ public:
 	using allocator_type  = _Al;
 
 protected:
+	using _Mytable::_Myimp;
 	using _Mytable::bucket_insert;
 
 public:

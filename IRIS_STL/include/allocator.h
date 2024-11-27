@@ -80,6 +80,20 @@ public:
 		_Obj.~_Ty();
 	}
 };
+
+template <typename _Alloc, bool = __is_empty(_Alloc)>
+struct __alloc_swap {
+	static void _S_do_it(_Alloc&, _Alloc&) {}
+};
+
+template <typename _Alloc>
+struct __alloc_swap<_Alloc, false> {
+	static bool _S_do_it(const _Alloc& __one, const _Alloc& __two) {
+		if (__one != __two) {
+			swap(__one, __two);
+		}
+	}
+};
 _IRIS_END_
 #undef _REDEFINE_NEW_OPERATORS_
 #endif // _IRIS_ALLOCATOR_
