@@ -161,15 +161,15 @@ public:
 
 template <typename _Ty, typename _Al>
 struct _Vector_base {
-	typedef typename _Al::template rebind<_Ty>::other _Myal_type;
+	typedef typename _Al::template rebind<_Ty>::other _Ty_al_type;
 
-	struct _Vector_imp : public _Myal_type {
-		typename _Myal_type::pointer _Myfirst;
-		typename _Myal_type::pointer _Mylast;
-		typename _Myal_type::pointer _Myend;
+	struct _Vector_imp : public _Ty_al_type {
+		typename _Ty_al_type::pointer _Myfirst;
+		typename _Ty_al_type::pointer _Mylast;
+		typename _Ty_al_type::pointer _Myend;
 
-		_Vector_imp() : _Myal_type(), _Myfirst(0), _Mylast(0), _Myend(0) {}
-		_Vector_imp(_Myal_type const& _A) : _Myal_type(_A), _Myfirst(0), _Mylast(0), _Myend(0) {}
+		_Vector_imp() : _Ty_al_type(), _Myfirst(0), _Mylast(0), _Myend(0) {}
+		_Vector_imp(_Ty_al_type const& _A) : _Ty_al_type(_A), _Myfirst(0), _Mylast(0), _Myend(0) {}
 	};
 
 public:
@@ -206,12 +206,12 @@ public:
 	}
 
 public:
-	_Myal_type& _Getal_type() {
-		return *static_cast<_Myal_type*>(&_Myimp);
+	_Ty_al_type& _Getal_type() {
+		return *static_cast<_Ty_al_type*>(&_Myimp);
 	}
 
-	const _Myal_type& _Getal_type() const {
-		return *static_cast<const _Myal_type*>(&_Myimp);
+	const _Ty_al_type& _Getal_type() const {
+		return *static_cast<const _Ty_al_type*>(&_Myimp);
 	}
 
 	allocator_type _Getal() const {
@@ -221,11 +221,11 @@ public:
 public:
 	_Vector_imp _Myimp;
 
-	typename _Myal_type::pointer _Alloc(size_t _Size) {
+	typename _Ty_al_type::pointer _Alloc(size_t _Size) {
 		return _Size != 0 ? _Myimp.allocate(_Size) : 0;
 	}
 
-	void _Dealloc(typename _Myal_type::pointer _Ptr, size_t _Size) {
+	void _Dealloc(typename _Ty_al_type::pointer _Ptr, size_t _Size) {
 		if (_Ptr) _Myimp.deallocate(_Ptr, _Size);
 	}
 };
@@ -234,8 +234,8 @@ template <typename _Ty, typename _Al = IRIS::allocator<_Ty>>
 class vector : protected _Vector_base<_Ty, _Al> {
 	typedef typename _Al::value_type _Myal_value_type;
 
-	typedef _Vector_base<_Ty, _Al>		 _Mybase;
-	typedef typename _Mybase::_Myal_type _Myal_type;
+	typedef _Vector_base<_Ty, _Al>		  _Mybase;
+	typedef typename _Mybase::_Ty_al_type _Ty_al_type;
 
 public:
 	using value_type	  = _Ty;
