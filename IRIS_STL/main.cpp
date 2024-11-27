@@ -7,8 +7,13 @@
 #include <hash.h>
 #include <list>
 #include <list.h>
+#include <unordered_map.h>
+#include <unordered_map>
 
 int main() {
+	{
+		IRIS::unordered_map<int, int> map;
+	}
 	{
 		IRIS::list<IRIS::list<int>> lists;
 		IRIS::list<int> list = { 1, 2, 3 };
@@ -16,6 +21,8 @@ int main() {
 		lists.push_back(list);
 
 		list.pop_back();
+
+		long long hash = IRIS::XXH64(list);
 	}
 	{
 		std::list<std::vector<int>> stdListVec;
