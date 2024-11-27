@@ -17,11 +17,11 @@ struct _Node {
 
 #if __CXX_HASCXX0X__
 	template <typename... _Args>
-	_Node(_Args&&... _Myargs) : _Myval(IRIS::forward<_Args>(_Myargs)...) {}
+	_Node(_Args&&... _Myargs) : _Myval(iris::forward<_Args>(_Myargs)...) {}
 #endif // __CXX_HASCXX0X__
 
 	static void swap(_Noderef _Left, _Noderef _Right) throw() {
-		using IRIS::swap;
+		using iris::swap;
 		swap(_Left, _Right);
 	}
 
@@ -39,7 +39,7 @@ struct _Node {
 	}
 
 	void _reverse() throw() {
-		using IRIS::swap;
+		using iris::swap;
 		_Nodeptr _Tmp = this;
 		do {
 			swap(_Tmp->_Next, _Tmp->_Prev);
@@ -167,7 +167,7 @@ public:
 	}
 };
 
-template <typename _Ty, typename _Al = IRIS::allocator<_Ty>>
+template <typename _Ty, typename _Al = iris::allocator<_Ty>>
 class list : protected _List_base<_Ty, _Al> {
 	typedef typename _Al::value_type _Myal_value_type;
 
@@ -274,7 +274,7 @@ public:
 
 #if __CXX_HASCXX0X__
 	void push_front(value_type&& _Val) {
-		_Nodeptr _Tmp = _create_node(IRIS::move(_Val));
+		_Nodeptr _Tmp = _create_node(iris::move(_Val));
 		_Tmp->_hook(_Myimp._Myhead->_Next);
 		++_Myimp._Mysize;
 	}
@@ -287,7 +287,7 @@ public:
 	}
 #if __CXX_HASCXX0X__
 	void push_back(value_type&& _Val) {
-		_Nodeptr _Tmp = _create_node(IRIS::move(_Val));
+		_Nodeptr _Tmp = _create_node(iris::move(_Val));
 		_Tmp->_hook(_Myimp._Myhead);
 		++_Myimp._Mysize;
 	}
@@ -299,7 +299,7 @@ public:
 #if __CXX_HASCXX0X__
 		_Getnodal().destroy(_node_to_delete);
 #else
-		_Getyal().destroy(IRIS::__addressof(_node_to_delete->_Myval));
+		_Getyal().destroy(iris::__addressof(_node_to_delete->_Myval));
 #endif // __CXX_HASCXX0X__
 
 		del_node(_node_to_delete);
@@ -312,7 +312,7 @@ public:
 #if __CXX_HASCXX0X__
 		_Getnodal().destroy(_node_to_delete);
 #else
-		_Getyal().destroy(IRIS::__addressof(_node_to_delete->_Myval));
+		_Getyal().destroy(iris::__addressof(_node_to_delete->_Myval));
 #endif // __CXX_HASCXX0X__
 		
 		del_node(_node_to_delete);
@@ -326,7 +326,7 @@ private:
 	_Nodeptr _create_node(_Types&&... _Args) {
 		_Nodeptr _newnode = get_node();
 		try {
-			_Getnodal().construct(_newnode, IRIS::forward<_Types>(_Args)...);
+			_Getnodal().construct(_newnode, iris::forward<_Types>(_Args)...);
 		}
 		catch (...) {
 			del_node(_newnode);
@@ -337,7 +337,7 @@ private:
 	_Nodeptr _create_node(const value_type& _Val) {
 		_Nodeptr _newnode = get_node();
 		try {
-			_Getyal().construct(IRIS::__addressof(_newnode->_Myval), _Val);
+			_Getyal().construct(iris::__addressof(_newnode->_Myval), _Val);
 		}
 		catch (...) {
 			del_node(_newnode);

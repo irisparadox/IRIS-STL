@@ -36,15 +36,15 @@ public:
 
 public:
 	pointer address(reference _Ref) const {
-		return IRIS::__addressof(_Ref);
+		return iris::__addressof(_Ref);
 	}
 
 	const_pointer address(const_reference _Ref) const {
-		return IRIS::__addressof(_Ref);
+		return iris::__addressof(_Ref);
 	}
 
 	pointer allocate(size_type _N, const void* = 0) {
-		if (_N > max_size()) throw IRIS::bad_alloc();
+		if (_N > max_size()) throw iris::bad_alloc();
 
 		return static_cast<_Ty*>(::operator new(_N * sizeof(_Ty)));
 	}
@@ -63,12 +63,12 @@ public:
 
 	template <typename... _Args>
 	void construct(pointer _Ptr, _Args&&... _Myargs) {
-		::new((void*)_Ptr) _Ty(IRIS::forward<_Args>(_Myargs)...);
+		::new((void*)_Ptr) _Ty(iris::forward<_Args>(_Myargs)...);
 	}
 
 	template <typename _Ty, typename... _Types>
 	void construct_in_place(_Ty& _Obj, _Types&&... _Args) {
-		::new (static_cast<void*>(IRIS::__addressof(_Obj))) _Ty(IRIS::forward<_Types>(_Args)...);
+		::new (static_cast<void*>(iris::__addressof(_Obj))) _Ty(iris::forward<_Types>(_Args)...);
 	}
 
 	void destroy(pointer _Ptr) {

@@ -12,17 +12,31 @@
 
 int main() {
 	{
-		IRIS::unordered_map<int, int> map;
+		iris::vector<int> testCases;
+		for (int i = 0; i <= 1000; ++i) {
+			testCases.push_back(i);
+		}
+
+		std::unordered_map<int, int> hashmap;
+		int collisions = 0;
+
+		for (const auto val : testCases) {
+			int hashedValue = iris::XXH64(val);
+
+			if (hashmap.count(hashedValue)) ++collisions;
+
+			++hashmap[hashedValue];
+		}
 	}
 	{
-		IRIS::list<IRIS::list<int>> lists;
-		IRIS::list<int> list = { 1, 2, 3 };
+		iris::list<iris::list<int>> lists;
+		iris::list<int> list = { 1, 2, 3 };
 
 		lists.push_back(list);
 
 		list.pop_back();
 
-		long long hash = IRIS::XXH64(list);
+		long long hash = iris::XXH64(list);
 	}
 	{
 		std::list<std::vector<int>> stdListVec;
@@ -33,7 +47,7 @@ int main() {
 		stdListVec.push_front(stdvec);
 	}
 	{
-		IRIS::vector<int> vec;
+		iris::vector<int> vec;
 		vec.push_back(16);
 		vec.push_back(32);
 		vec.push_back(64);
@@ -42,7 +56,7 @@ int main() {
 		vec.push_back(512);
 		vec.push_back(1024);
 
-		IRIS::vector<bool> vec2;
+		iris::vector<bool> vec2;
 		vec2.push_back(true);
 		vec2.push_back(true);
 		vec2.push_back(false);
@@ -51,8 +65,8 @@ int main() {
 		vec2.push_back(false);
 		vec2.push_back(true);
 
-		IRIS::pair<int, int> _Mypair(1, 2);
-		IRIS::pair<int, int> _Mypair2(1, 2);
+		iris::pair<int, int> _Mypair(1, 2);
+		iris::pair<int, int> _Mypair2(1, 2);
 
 		bool is = (_Mypair == _Mypair2);
 
@@ -62,14 +76,14 @@ int main() {
 
 		vec.pop_back();
 
-		IRIS::vector<int>::iterator it = vec.begin();
+		iris::vector<int>::iterator it = vec.begin();
 
 		it++;
 
-		IRIS::vector<const char*> vec3(10, "abc");
+		iris::vector<const char*> vec3(10, "abc");
 
-		IRIS::list<int> list;
-		IRIS::list<IRIS::vector<int>> listVec;
+		iris::list<int> list;
+		iris::list<iris::vector<int>> listVec;
 
 		list.push_back(5);
 		list.push_front(10);
@@ -81,15 +95,15 @@ int main() {
 		list.front();
 		list.back();
 
-		IRIS::vector<int> movevec(IRIS::move(vec));
+		iris::vector<int> movevec(iris::move(vec));
 
 		vec.push_back(10);
 	}
 	{
 		int inputInt = 42;
-		long long hashInt = IRIS::XXH64(inputInt);
+		long long hashInt = iris::XXH64(inputInt);
 		int input2 = 43;
-		long long hashInt1 = IRIS::XXH64(input2);
+		long long hashInt1 = iris::XXH64(input2);
 
 		if (hashInt == hashInt1) return -1;
 	}

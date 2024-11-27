@@ -31,7 +31,7 @@
 // Macros for namespacing
 //	_IRIS_BEGIN_
 //	_IRIS_END_
-#define _IRIS_BEGIN_ namespace IRIS {
+#define _IRIS_BEGIN_ namespace iris {
 #define _IRIS_END_ }
 
 _IRIS_BEGIN_

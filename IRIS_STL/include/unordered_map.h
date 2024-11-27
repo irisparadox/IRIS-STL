@@ -11,11 +11,11 @@ _IRIS_BEGIN_
 template <typename _Key, typename _Val, typename _Al>
 class hashtable {
 protected:
-	typedef typename _Al::template rebind<IRIS::list<IRIS::pair<_Key, _Val>>>::other _Bucket_alloc_type;
+	typedef typename _Al::template rebind<iris::list<iris::pair<_Key, _Val>>>::other _Bucket_alloc_type;
 	
-	using _Mypair_type = IRIS::pair<_Key, _Val>;
-	using _Mybucket_type = IRIS::list<_Mypair_type>;
-	using _Mytable_type = IRIS::vector<_Mybucket_type>;
+	using _Mypair_type = iris::pair<_Key, _Val>;
+	using _Mybucket_type = iris::list<_Mypair_type>;
+	using _Mytable_type = iris::vector<_Mybucket_type>;
 
 	struct _hashtable_imp : public _Bucket_alloc_type {
 		_Mytable_type _Mytable;
@@ -31,7 +31,7 @@ public:
 	hashtable() : _Myimp() {}
 };
 
-template <typename _Key, typename _Val, typename _Al = IRIS::allocator<IRIS::pair<_Key,_Val>>>
+template <typename _Key, typename _Val, typename _Al = iris::allocator<iris::pair<_Key,_Val>>>
 class unordered_map : protected hashtable<_Key, _Val, _Al> {
 	typedef typename _Al::value_type _Myal_value_type;
 

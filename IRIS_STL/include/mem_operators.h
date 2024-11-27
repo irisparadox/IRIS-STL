@@ -23,19 +23,19 @@ _IRIS_END_
 
 #ifdef _REDEFINE_NEW_OPERATORS_
 #if __cplusplus < __CXX17__
-	void* operator new(IRIS::size_t) throw(IRIS::bad_alloc);
-	void* operator new[](IRIS::size_t) throw(IRIS::bad_alloc);
+	void* operator new(iris::size_t) throw(iris::bad_alloc);
+	void* operator new[](iris::size_t) throw(iris::bad_alloc);
 #else
-	void* operator new(IRIS::size_t) noexcept(false);
-	void* operator new[](IRIS::size_t) noexcept(false);
+	void* operator new(iris::size_t) noexcept(false);
+	void* operator new[](iris::size_t) noexcept(false);
 #endif
 
 void  operator delete(void*) throw();
 void  operator delete[](void*) throw();
 
 // Default versions of new
-inline void* operator new(IRIS::size_t, void* _Ptr) throw() { return _Ptr; }
-inline void* operator new[](IRIS::size_t, void* _Ptr) throw() { return _Ptr; }
+inline void* operator new(iris::size_t, void* _Ptr) throw() { return _Ptr; }
+inline void* operator new[](iris::size_t, void* _Ptr) throw() { return _Ptr; }
 
 // Default versions of delete
 inline void  operator delete(void*, void*) throw() { }

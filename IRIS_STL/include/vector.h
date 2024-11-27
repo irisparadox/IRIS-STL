@@ -11,7 +11,7 @@ public:
 	bad_construct() throw() {}
 	~bad_construct() throw() {}
 
-	const char* what() const throw() { return "bad object construct in IRIS::vector"; }
+	const char* what() const throw() { return "bad object construct in iris::vector"; }
 };
 
 class length_error : public exception {
@@ -19,7 +19,7 @@ public:
 	length_error() throw() {}
 	~length_error() throw() {}
 	
-	const char* what() const throw() { return "specified length is over the limit in IRIS::vector"; }
+	const char* what() const throw() { return "specified length is over the limit in iris::vector"; }
 };
 
 class out_of_range : public exception {
@@ -27,7 +27,7 @@ public:
 	out_of_range() throw() {}
 	~out_of_range() throw() {}
 
-	const char* what() const throw() { return "specified index is out of range in IRIS::vector"; }
+	const char* what() const throw() { return "specified index is out of range in iris::vector"; }
 };
 
 template <typename _Ty>
@@ -230,7 +230,7 @@ public:
 	}
 };
 
-template <typename _Ty, typename _Al = IRIS::allocator<_Ty>>
+template <typename _Ty, typename _Al = iris::allocator<_Ty>>
 class vector : protected _Vector_base<_Ty, _Al> {
 	typedef typename _Al::value_type _Myal_value_type;
 
@@ -313,7 +313,7 @@ public:
 	*	@brief Move constructor of vector.
 	*	@param Right A vector matching element and allocator types.
 	*/
-	vector(vector&& _Right) throw() : _Mybase(IRIS::move(_Right)) {}
+	vector(vector&& _Right) throw() : _Mybase(iris::move(_Right)) {}
 
 
 	/**
@@ -430,7 +430,7 @@ public:
 	void push_back(value_type&& _Val) {
 		if (_Myimp._Mylast == _Myimp._Myend) reserve(_New_capacity());
 
-		_Myimp.construct(_Myimp._Mylast, IRIS::move(_Val));
+		_Myimp.construct(_Myimp._Mylast, iris::move(_Val));
 		++_Myimp._Mylast;
 	}
 #endif // __CXX_HASCXX0X__
@@ -460,12 +460,12 @@ private:
 		pointer _Current = _Myimp._Myfirst;
 		try {
 			for (; _Size > 0; --_Size, ++_Current) {
-				_Myimp.construct(IRIS::__addressof(*_Current), _Val);
+				_Myimp.construct(iris::__addressof(*_Current), _Val);
 			}
 		}
 		catch (...) {
 			for (; _Current >= _Myimp._Myfirst; --_Current) {
-				_Myimp.destroy(IRIS::__addressof(*_Current));
+				_Myimp.destroy(iris::__addressof(*_Current));
 			}
 			_Econstruct_();
 		}
@@ -475,12 +475,12 @@ private:
 		pointer _Current = _Myimp._Myfirst;
 		try {
 			for (; _Size > 0; --_Size, ++_Current) {
-				_Myimp.construct(IRIS::__addressof(*_Current));
+				_Myimp.construct(iris::__addressof(*_Current));
 			}
 		}
 		catch (...) {
 			for (; _Current >= _Myimp._Myfirst; --_Current) {
-				_Myimp.destroy(IRIS::__addressof(*_Current));
+				_Myimp.destroy(iris::__addressof(*_Current));
 			}
 			_Econstruct_();
 		}
@@ -496,13 +496,13 @@ private:
 		pointer _Current = _result;
 		try {
 			for (; _First != _Last; ++_First, ++_Current) {
-				_Myimp.construct(IRIS::__addressof(*_Current), *_First);
+				_Myimp.construct(iris::__addressof(*_Current), *_First);
 			}
 			return _Current;
 		}
 		catch (...) {
 			for (; _Current >= _result; --_Current) {
-				_Myimp.destroy(IRIS::__addressof(*_Current));
+				_Myimp.destroy(iris::__addressof(*_Current));
 				_Econstruct_();
 			}
 		}
@@ -511,7 +511,7 @@ private:
 	void _Destroy() {
 		pointer _Current = _Myimp._Myfirst;
 		for (; _Current != _Myimp._Mylast; ++_Current) {
-			_Myimp.destroy(IRIS::__addressof(*_Current));
+			_Myimp.destroy(iris::__addressof(*_Current));
 		}
 	}
 

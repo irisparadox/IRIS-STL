@@ -15,23 +15,23 @@ inline _Ty* __addressof(_Ty& _R) {
 }
 
 template <typename _Ty>
-inline _Ty&& forward(typename IRIS::remove_reference<_Ty>::_Mytype& _Type) {
+inline _Ty&& forward(typename iris::remove_reference<_Ty>::_Mytype& _Type) {
 	return static_cast<_Ty&&>(_Type);
 }
 
 template <typename _Ty>
-inline _Ty&& forward(typename IRIS::remove_reference<_Ty>::_Mytype&& _Type) {
-	static_assert(!IRIS::is_lvalue_reference<_Ty>::value, "template argument substituting _Ty is an lvalue reference type");
+inline _Ty&& forward(typename iris::remove_reference<_Ty>::_Mytype&& _Type) {
+	static_assert(!iris::is_lvalue_reference<_Ty>::value, "template argument substituting _Ty is an lvalue reference type");
 	return static_cast<_Ty&&>(_Type);
 }
 
 template <typename _Ty>
-inline typename IRIS::remove_reference<_Ty>::_Mytype&& move(_Ty&& _Type) {
-	return static_cast<typename IRIS::remove_reference<_Ty>::_Mytype&&>(_Type);
+inline typename iris::remove_reference<_Ty>::_Mytype&& move(_Ty&& _Type) {
+	return static_cast<typename iris::remove_reference<_Ty>::_Mytype&&>(_Type);
 }
 
-#define _ILIBCXX_MOVE(_Val) IRIS::move(_Val)
-#define _ILIBCXX_FORWARD(_Ty, _Val) IRIS::forward<_Ty>(_Val)
+#define _ILIBCXX_MOVE(_Val) iris::move(_Val)
+#define _ILIBCXX_FORWARD(_Ty, _Val) iris::forward<_Ty>(_Val)
 #else
 #define _ILIBCXX_MOVE(_Val) (_Val)
 #define _ILIBCXX_FORWARD(_Val) (_Val)

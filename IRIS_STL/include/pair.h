@@ -24,7 +24,7 @@ struct pair {
 	constexpr pair(const pair&) = default;
 
 	template <class _U1, class _U2>
-	pair(pair<_U1, _U2>&& _Mypair) : first(IRIS::forward<_U1>(_Mypair.first)), second(IRIS::forward<_U2>(_Mypair.second)) {}
+	pair(pair<_U1, _U2>&& _Mypair) : first(iris::forward<_U1>(_Mypair.first)), second(iris::forward<_U2>(_Mypair.second)) {}
 
 	pair& operator=(const pair& _Mypair) {
 		first = _Mypair.first;
@@ -33,8 +33,8 @@ struct pair {
 	}
 
 	pair& operator=(pair&& _Mypair) {
-		first = IRIS::move(_Mypair.first);
-		second = IRIS::move(_Mypair.second);
+		first = iris::move(_Mypair.first);
+		second = iris::move(_Mypair.second);
 		return *this;
 	}
 
@@ -47,13 +47,13 @@ struct pair {
 
 	template <class _U1, class _U2>
 	pair& operator=(pair<_U1, _U2>&& _Mypair) {
-		first = IRIS::move(_Mypair.first);
-		second = IRIS::move(_Mypair.second);
+		first = iris::move(_Mypair.first);
+		second = iris::move(_Mypair.second);
 		return *this;
 	}
 
 	void swap(pair& _Mypair) {
-		using IRIS::swap;
+		using iris::swap;
 		swap(first, _Mypair.first);
 		swap(second, _Mypair.second);
 	}
