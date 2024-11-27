@@ -94,6 +94,117 @@ struct _Node {
 	}
 };
 
+template <typename _Ty>
+class _List_const_iterator {
+public:
+	using _Node			  = _Node<_Ty>;
+	using const_pointer	  = const _Ty*;
+	using const_reference = const _Ty&;
+	using size_type		  = size_t;
+	using difference_type = ptrdiff_t;
+
+	typedef _List_const_iterator _Self;
+	
+	_List_const_iterator() throw() : _Ptr(), _Idx() {}
+	explicit _List_const_iterator(_Node* _Pnode) throw() : _Ptr(_Pnode), _Idx(0) {}
+
+public:
+	_ILIBCXX_CONSTEXPR const_reference operator*() const throw() {
+		return *operator->();
+	}
+
+	_ILIBCXX_CONSTEXPR const_pointer operator->() const throw() {
+		return iris::__addressof(_Ptr->_Myval);
+	}
+
+	_ILIBCXX_CONSTEXPR _Self& operator++() throw() {
+		_Ptr = _Ptr->_Next;
+		++_Idx;
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Self operator++(int) throw() {
+		_Self _Tmp = *this;
+		++*this;
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR _Self& operator--() throw() {
+		_Ptr = _Ptr->_Prev;
+		--_Idx;
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Self operator--(int) throw() {
+		_Self _Tmp = *this;
+		--*this;
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator==(const _Self& _Right) const throw() {
+		return _Ptr == _Right._Ptr;
+	}
+
+	_ILIBCXX_CONSTEXPR bool operator!=(const _Self& _Right) const throw() {
+		return !(*this == _Right);
+	}
+
+protected:
+	_Node* _Ptr;
+	difference_type _Idx;
+};
+
+template <typename _Ty>
+class _List_iterator : public _List_const_iterator<_Ty> {
+public:
+	using _Mybase = _List_const_iterator<_Ty>;
+
+	using _Self			  = _List_iterator;
+	using _Node			  = _Node<_Ty>;
+	using pointer		  = _Ty*;
+	using reference		  = _Ty&;
+	using size_type		  = size_t;
+	using difference_type = ptrdiff_t;
+
+	_List_iterator() throw() : _Mybase() {}
+	explicit _List_iterator(_Node* _Pnode) : _Mybase(_Pnode) {}
+
+protected:
+	using _Mybase::_Ptr;
+	using _Mybase::_Idx;
+
+public:
+	_ILIBCXX_CONSTEXPR reference operator*() const throw() {
+		return const_cast<reference>(_Mybase::operator*());
+	}
+
+	_ILIBCXX_CONSTEXPR pointer operator->() const throw() {
+		return iris::__addressof(_Ptr->_Myval);
+	}
+
+	_ILIBCXX_CONSTEXPR _Self& operator++() throw() {
+		_Mybase::operator++();
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Self operator++(int) throw() {
+		_Self _Tmp = *this;
+		_Mybase::operator++();
+		return _Tmp;
+	}
+
+	_ILIBCXX_CONSTEXPR _Self& operator--() throw() {
+		_Mybase::operator--();
+		return *this;
+	}
+
+	_ILIBCXX_CONSTEXPR _Self operator--(int) throw() {
+		_Self _Tmp = *this;
+		_Mybase::operator--();
+		return _Tmp;
+	}
+};
+
 template <typename _Ty, typename _Al>
 class _List_base {
 protected:
@@ -184,6 +295,9 @@ public:
 	using const_reference = const _Ty&;
 	using allocator_type  = _Al;
 
+	using const_iterator = _List_const_iterator<_Ty>;
+	using iterator		 = _List_iterator<_Ty>;
+
 protected:
 	using _Mybase::_Myimp;
 	using _Mybase::get_node;
@@ -234,6 +348,23 @@ public:
 	}
 
 	~list() {}
+
+public:
+	iterator begin() {
+		return iterator(_Myimp._Myhead->_Next);
+	}
+
+	iterator end() {
+		return iterator(_Myimp._Myhead);
+	}
+
+	const_iterator cbegin() {
+		return const_iterator(_Myimp._Myhead->_Next);
+	}
+
+	const_iterator cend() {
+		return const_iterator(_Myimp._Myhead);
+	}
 
 public:
 	reference front() {

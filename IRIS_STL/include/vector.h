@@ -33,7 +33,6 @@ public:
 template <typename _Ty>
 class _Vector_const_iterator {
 public:
-	using value_type	  = _Ty;
 	using const_pointer	  = const _Ty*;
 	using const_reference = const _Ty&;
 	using size_type		  = size_t;
@@ -116,7 +115,7 @@ public:
 	using size_type		  = size_t;
 	using difference_type = ptrdiff_t;
 
-	_Vector_iterator() throw() : _Ptr(), _Idx() {}
+	_Vector_iterator() throw() : _Mybase() {}
 	explicit _Vector_iterator(pointer _Pvec, difference_type _Off) throw() : _Mybase(_Pvec, _Off) {}
 
 protected:
@@ -148,7 +147,7 @@ public:
 		return *this;
 	}
 
-	_ILIBCXX_CONSTEXPR _Vector_iterator operator-(int) throw() {
+	_ILIBCXX_CONSTEXPR _Vector_iterator operator--(int) throw() {
 		_Vector_iterator _Tmp = *this;
 		_Mybase::operator--();
 		return _Tmp;
@@ -189,7 +188,7 @@ public:
 	}
 
 #if __CXX_HASCXX0X__
-	_Vector_base(_Vector_base&& _Right) : _Myimp(_Right._Getal_type()) {
+	_Vector_base(_Vector_base&& _Right) throw() : _Myimp(_Right._Getal_type()) {
 		_Myimp._Myfirst = _Right._Myimp._Myfirst;
 		_Myimp._Mylast  = _Right._Myimp._Mylast;
 		_Myimp._Myend	= _Right._Myimp._Myend;
@@ -321,8 +320,13 @@ public:
 	*	@param L An initializer list matching element type.
 	*	@param A An allocator object.
 	*/
-	vector(std::initializer_list<value_type> _L, const allocator_type& _A) : _Mybase(_A) {
+	vector(std::initializer_list<value_type> _L, const allocator_type& _A = allocator_type()) : _Mybase(_A) {
 		assign(_L);
+	}
+
+	vector& operator=(std::initializer_list<value_type> _L) {
+		assign(_L);
+		return *this;
 	}
 
 	void assign(std::initializer_list<value_type>& _L) {
@@ -414,6 +418,11 @@ public:
 		_Myimp._Myend	= _Myimp._Myfirst + _Size;
 	}
 
+	void resize(size_type _Size) {
+		if (_Size > size()) _Default_append(_Size);
+		else if (_Size < size()) _erase(size() - _Size);
+	}
+
 	size_type capacity() const {
 		return _Myimp._Myend - _Myimp._Myfirst;
 	}
@@ -484,6 +493,35 @@ private:
 			}
 			_Econstruct_();
 		}
+	}
+
+	void _Default_append(size_type _Size) {
+		bool has_expanded = false;
+		if (_Size > capacity()) {
+			reserve(_Size);
+			has_expanded = true;
+		}
+		pointer _Last = has_expanded ? _Myimp._Myend : _Myimp._Myfirst + _Size;
+		pointer _Current = _Myimp._Mylast;
+		try {
+			for (; _Current != _Last; ++_Current) {
+				_Myimp.construct(iris::__addressof(*_Current));
+			}
+		}
+		catch (...) {
+			for (; _Current >= _Myimp._Mylast; --_Current) {
+				_Myimp.destroy(iris::__addressof(*_Current));
+			}
+		}
+		_Myimp._Mylast = _Last;
+	}
+
+	void _erase(size_type _Size) {
+		pointer _Current = _Myimp._Mylast - 1;
+		for (; _Current >= _Myimp._Mylast - _Size; --_Current) {
+			_Myimp.destroy(iris::__addressof(*_Current));
+		}
+		_Myimp._Mylast -= _Size;
 	}
 
 	pointer _Allocate_and_copy(size_type _Size, pointer _First, pointer _Last) {

@@ -12,16 +12,51 @@
 
 int main() {
 	{
-		iris::vector<int> testCases;
-		for (int i = 0; i <= 1000; ++i) {
-			testCases.push_back(i);
+		iris::unordered_map<int, int> map;
+		map.insert({ 1, 2 });
+	}
+	{
+		iris::list<int> list = { 1, 2, 3 };
+		for (auto val : list) {
+			std::cout << val << '\n';
 		}
+	}
+	{
+		iris::vector<std::string> testCases = {
+		"hola", "mundo", "amor", "familia", "trabajo", "felicidad", "pasión", "amistad", "comida", "salud",
+		"paz", "cielo", "mar", "tiempo", "libertad", "futuro", "noche", "día", "nieve", "luz",
+		"agua", "tierra", "fuego", "aire", "viento", "corazón", "estudio", "tecnología", "desarrollo",
+		"aprendizaje", "sabiduría", "espejo", "flor", "árbol", "montaña", "río", "sendero", "camino",
+		"verdad", "mentira", "conocimiento", "educación", "lengua", "literatura", "cultura", "música",
+		"pintura", "ciencia", "historia", "sociedad", "persona", "hombre", "mujer", "niño", "adolescente",
+		"adulto", "viejo", "joven", "viaje", "vacaciones", "ciudad", "pueblo", "campo", "natura",
+		"paisaje", "pintura", "cultura", "país", "gente", "pueblo", "realidad", "fantasía", "sueño",
+		"justicia", "legalidad", "violencia", "guerra", "paz", "revolución", "cambio", "progreso",
+		"comunicación", "televisión", "internet", "redes", "informática", "salud", "medicina",
+		"alimento", "higiene", "salud", "ejercicio", "deporte", "arte", "fotografía", "dibujo",
+		"pintura", "escultura", "danza", "cine", "teatro", "espectáculo", "entretenimiento",
+		"estética", "ciencia", "física", "matemáticas", "química", "biología", "geografía", "astronomía",
+		"ecología", "evolución", "genes", "célula", "sangre", "médico", "hospital", "enfermero",
+		"hospital", "operación", "medicamento", "cura", "enfermedad", "salud", "cuerpo", "mente",
+		"psicología", "sociedad", "política", "derechos", "justicia", "gobierno", "ley", "reforma",
+		"democracia", "dictadura", "monarquía", "revolución", "congreso", "presidente", "ciudadano",
+		"voto", "elección", "partido", "socialismo", "capitalismo", "comunismo", "liberalismo",
+		"anarquismo", "feminismo", "racismo", "sexismo", "homofobia", "tolerancia", "respeto",
+		"igualdad", "solidaridad", "ayuda", "cooperación", "compañerismo", "hermandad", "trabajo",
+		"economía", "empleo", "dinero", "desempleo", "salario", "ricos", "pobres", "acuerdo",
+		"mercado", "comercio", "empresa", "industria", "trabajador", "empleado", "empleador",
+		"trabajo", "sueldo", "ahorro", "crisis", "crecimiento", "competencia", "gasto", "gobierno",
+		"presupuesto", "impuestos", "subsidio", "empleabilidad", "progreso", "futuro", "destino",
+		"camino", "esfuerzo", "motivación", "superación", "éxito", "fracaso", "depresión", "ansiedad",
+		"estrés", "alegría", "tristeza", "felicidad", "sufrimiento", "emoción", "sentimiento",
+		"pensamiento", "razón", "mente", "alma", "cuerpo", "psique", "respiración", "vivir", "morir"
+		};
 
-		std::unordered_map<int, int> hashmap;
+		std::unordered_map<unsigned long long, int> hashmap;
 		int collisions = 0;
 
 		for (const auto val : testCases) {
-			int hashedValue = iris::XXH64(val);
+			unsigned long long hashedValue = iris::XXH64(val);
 
 			if (hashmap.count(hashedValue)) ++collisions;
 

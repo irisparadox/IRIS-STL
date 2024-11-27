@@ -2,7 +2,7 @@
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
 	<!-- VECTOR VISUALIZER -->
-	<Type Name="IRIS::vector&lt;*&gt;">
+	<Type Name="iris::vector&lt;*&gt;">
 		<Intrinsic Name="size" Expression="(size_t)(_Myimp._Mylast - _Myimp._Myfirst)" />
 		<Intrinsic Name="capacity" Expression="(size_t)(_Myimp._Myend - _Myimp._Myfirst)" />
 		<DisplayString>{{ size={size()} }}</DisplayString>
@@ -17,7 +17,7 @@
 	</Type>
 
 	<!-- VECTOR CONST ITERATOR VISUALIZER -->
-	<Type Name="IRIS::_Vector_const_iterator&lt;*&gt;">
+	<Type Name="iris::_Vector_const_iterator&lt;*&gt;">
 		<Intrinsic Name="pointer" Expression="_Ptr" />
 		<Intrinsic Name="index" Expression="_Idx" />
 		<Intrinsic Name="value" Expression="*(_Ptr + _Idx)" />
@@ -30,7 +30,7 @@
 	</Type>
 
 	<!-- VECTOR ITERATOR VISUALIZER -->
-	<Type Name="IRIS::_Vector_iterator&lt;*&gt;">
+	<Type Name="iris::_Vector_iterator&lt;*&gt;">
 		<Intrinsic Name="pointer" Expression="_Ptr" />
 		<Intrinsic Name="index" Expression="_Idx" />
 		<Intrinsic Name="value" Expression="*(_Ptr + _Idx)" />
@@ -43,7 +43,7 @@
 	</Type>
 
 	<!-- LIST VISUALIZER -->
-	<Type Name="IRIS::list&lt;*&gt;">
+	<Type Name="iris::list&lt;*&gt;">
 		<DisplayString>{{ size={_Myimp._Mysize} }}</DisplayString>
 		<Expand>
 			<Item Name="[allocator]" ExcludeView="simple">_Myimp</Item>
@@ -56,8 +56,21 @@
 		</Expand>
 	</Type>
 
+	<!-- LIST CONST ITERATOR VISUALIZER -->
+	<Type Name="iris::_List_const_iterator&lt;*&gt;">
+		<Intrinsic Name="node" Expression="_Ptr" />
+		<Intrinsic Name="index" Expression="_Idx" />
+		<Intrinsic Name="value" Expression="(_Ptr->_Myval)" />
+		<DisplayString>{{ current={value()} }}</DisplayString>
+		<Expand>
+			<Item Name="[node]" ExcludeView="simple">node()</Item>
+			<Item Name="[index]" ExcludeView="simple">index()</Item>
+			<Item Name="[value]" ExcludeView="simple">value()</Item>
+		</Expand>
+	</Type>
+
 	<!-- PAIR VISUALIZER -->
-	<Type Name="IRIS::pair&lt;*&gt;">
+	<Type Name="iris::pair&lt;*&gt;">
 		<DisplayString IncludeView="noparens">{first}, {second}</DisplayString>
 		<DisplayString ExcludeView="noparens">({first}, {second})</DisplayString>
 		<Expand>

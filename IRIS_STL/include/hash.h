@@ -32,6 +32,8 @@ uint64 XXH64(const _Ty& input, uint64 seed = 0) {
         uint64 v4 = seed - XXH64_PRIME1;
 
         for (int i = 0; i < 4; ++i) {
+            if (remainingLength < 8 * (i + 1)) break;
+
             uint64 k1 = *(uint64*)(data + i * 8);
             uint64 k2 = *(uint64*)(data + i * 8 + 8);
             uint64 k3 = *(uint64*)(data + i * 8 + 16);
