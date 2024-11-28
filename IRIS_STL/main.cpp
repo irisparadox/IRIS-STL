@@ -19,6 +19,9 @@ int main() {
 		map.insert({ 24, 1 });
 		map.insert({ 643, 10 });
 		map.insert({ 1024, 8 });
+		map.insert({ 56, 10 });
+		map.insert({ 9, 1 });
+		map.insert({ 1, 3 });
 	}
 	{
 		iris::list<int> list = { 1, 2, 3 };

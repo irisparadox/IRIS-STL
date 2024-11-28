@@ -32,18 +32,18 @@ protected:
 
 	_hashtable_imp _Myimp;
 
-	const float _MAX_LOAD = 0.75f;
+	const float _MAX_LOAD = 0.80f;
 
 	float _load() const {
-		return static_cast<float>(_Myimp._Mysize) / _Myimp._Mytable.size();
+		return static_cast<float>(_Myimp._Mysize) / _Myimp._Maxidx;
 	}
 
 	void _rehash() {
-		_Mytable_type new_table(_Myimp._Mytable.size());
+		_Mytable_type new_table(_Myimp._Maxidx);
 
 		for (auto& bucket : _Myimp._Mytable) {
 			for (auto& pair : bucket) {
-				size_t hashed_key = iris::XXH64(pair.first) % new_table.size();
+				size_t hashed_key = iris::XXH64(pair.first) & (_Myimp._Maxidx - 1);
 				new_table[hashed_key].push_back(pair);
 			}
 		}
@@ -53,7 +53,7 @@ protected:
 
 	void _resize() {
 		size_t _new_size = _Myimp._Mytable.size();
-		_new_size = _new_size > 1 ? _new_size + (_new_size / 2) : ++_new_size;
+		_new_size *= 2;
 
 		_Myimp._Mytable.resize(_new_size);
 		_Myimp._Maxidx = _new_size;
@@ -70,7 +70,7 @@ public:
 	void bucket_insert(const _Mypair_type& _Mypair) {
 		if (_load() > _MAX_LOAD) _resize();
 
-		const size_t hashed_key = iris::XXH64(_Mypair.first) % _Myimp._Mytable.size();
+		const size_t hashed_key = iris::XXH64(_Mypair.first) & (_Myimp._Maxidx - 1);
 
 		_Mybucket_type& bucket = _Myimp._Mytable[hashed_key];
 
