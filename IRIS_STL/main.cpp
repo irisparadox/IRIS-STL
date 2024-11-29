@@ -31,8 +31,6 @@ int main() {
 			int value = i;
 			map.insert({ key, value });
 		}
-
-		while (1);
 	}
 	{
 		iris::list<int> list = { 1, 2, 3 };

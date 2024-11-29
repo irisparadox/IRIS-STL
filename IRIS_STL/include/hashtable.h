@@ -1,3 +1,72 @@
+// hashtable.h -*- C++ -*-
+//
+// Copyright (C) 2024 irisparadox
+//
+// This file is part of the IRIS::STL C++ Library, licensed under the MIT License.
+// You may obtain a copy of the License at:
+//
+//     https://opensource.org/licenses/MIT
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so, subject
+// to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+// COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+// AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+/** @file hashtable.h
+ *  @brief Internal header file for the hashtable implementation in IRIS::STL.
+ *
+ *  This is an internal file used by other parts of the library. It should not be included
+ *  or used directly in your code. Instead, use @headername{unordered_map, unordered_set}.
+ *
+ *  ### Hashtable Concept
+ *  A hash table organizes values into "buckets" using a hash function. Each bucket
+ *  stores values or key-value pairs, typically using a linked list to handle collisions.
+ *  The hash function computes an index to place the values in the appropriate bucket.
+ *
+ *  #### Example:
+ *  Using "meow", "purr", "woof", and "bark" as keys, a hash table might distribute them
+ *  across buckets like so:
+ *
+ *  ```
+ *  +---+      +---+
+ *  | 0 | ---> | V | ["meow"]
+ *  +---+      +---+
+ *  +---+      +---+      +---+
+ *  | 1 | ---> | V | ---> | V | ["woof", "bark"]
+ *  +---+      +---+      +---+
+ *  +---+
+ *  | 2 |
+ *  +---+
+ *  +---+      +---+
+ *  | 3 | ---> | V | ["purr"]
+ *  +---+      +---+
+ *  ```
+ *
+ *  ### Explanation:
+ *  - "meow" hashes to bucket 0, so it is placed in the corresponding list.
+ *  - "woof" hashes to bucket 1, but "bark" also hashes to bucket 1, causing a collision.
+ *    Both are stored in the linked list for that bucket.
+ *  - "purr" hashes to bucket 3 and is placed there.
+ *
+ *  Hash tables often use linked lists for simplicity, but this comes at the cost of
+ *  more cache misses. Alternative designs (e.g., open addressing) reduce cache misses
+ *  but are more complex to implement. In this library, linked lists provide a balance
+ *  between simplicity and functionality.
+ */
+
+
 #ifndef _IRIS_HASHTABLE_
 #define _IRIS_HASHTABLE_
 
