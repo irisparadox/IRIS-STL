@@ -9,19 +9,30 @@
 #include <list.h>
 #include <unordered_map.h>
 #include <unordered_map>
+#include <random>
 
 int main() {
 	{
 		iris::unordered_map<int, int> map;
-		map.insert({ 1, 2 });
-		map.insert({ 2, 2 });
-		map.insert({ 5, 10 });
-		map.insert({ 24, 1 });
-		map.insert({ 643, 10 });
-		map.insert({ 1024, 8 });
-		map.insert({ 56, 10 });
-		map.insert({ 9, 1 });
-		map.insert({ 1, 3 });
+		map.insert({ 1, 1 });
+		map.insert({ 1, 10 });
+		map.insert({ 13523, 2 });
+	}
+	{
+		iris::unordered_map<int, int> map;
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dis(1, 1000);
+
+		
+		const int NUM_ENTRIES = 1000;
+		for (int i = 0; i < NUM_ENTRIES; ++i) {
+			int key = dis(gen);
+			int value = i;
+			map.insert({ key, value });
+		}
+
+		while (1);
 	}
 	{
 		iris::list<int> list = { 1, 2, 3 };

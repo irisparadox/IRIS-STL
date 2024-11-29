@@ -54,6 +54,15 @@
     <ClInclude Include="include\list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\key_extractor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hashtable_traits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hashtable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="IRIS_STL.natvis" />
