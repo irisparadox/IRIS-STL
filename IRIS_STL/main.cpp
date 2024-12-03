@@ -19,6 +19,7 @@ int main() {
 		map.insert({ 13523, 2 });
 		map[1];
 		map[5];
+		map[5] = 10;
 	}
 	{
 		iris::unordered_map<int, int> map;

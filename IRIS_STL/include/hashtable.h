@@ -105,12 +105,16 @@ protected:
 		return static_cast<float>(_Myimp._Mysize) / _Myimp._Maxidx;
 	}
 
+	const size_t _hash_calc(const _Key& _Mykey) const {
+		return iris::XXH64(_Mykey) & (_Myimp._Maxidx - 1);
+	}
+
 	void _rehash() {
 		_Mytable_type new_table(_Myimp._Maxidx);
 
 		for (auto& bucket : _Myimp._Mytable) {
 			for (auto& val : bucket) {
-				size_t hashed_key = iris::XXH64(_Myextract(val)) & (_Myimp._Maxidx - 1);
+				size_t hashed_key = _hash_calc(_Myextract(val));
 				new_table[hashed_key].push_back(val);
 			}
 		}
@@ -124,10 +128,6 @@ protected:
 		_Myimp._Mytable.resize(_new_size);
 		_Myimp._Maxidx = _new_size;
 		_rehash();
-	}
-
-	const size_t _hash_calc(const _Key& _Mykey) const {
-		return iris::XXH64(_Mykey) & (_Myimp._Maxidx - 1);
 	}
 
 public:
