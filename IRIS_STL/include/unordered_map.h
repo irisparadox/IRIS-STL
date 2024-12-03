@@ -50,18 +50,27 @@ public:
 	using const_key_ref	  = const _Key&;
 	using const_value_ptr = const _Val*;
 	using const_value_ref = const _Val&;
+	using pair_type		  = iris::pair<const _Key, _Val>;
 	using allocator_type  = _Al;
 
 protected:
 	using _Mytable::_Myimp;
 	using _Mytable::bucket_insert;
+	using _Mytable::find_value;
 
 public:
 	unordered_map() : _Mytable() {}
 
 public:
-	void insert(const pair<const _Key, _Val>& _Mypair) {
+	void insert(const pair_type& _Mypair) {
 		_Mytable::bucket_insert(_Mypair);
+	}
+
+	value_type& operator[](const _Key& _Mykey) {
+		pair_type* _Tmp = _Mytable::find_value(_Mykey);
+		if (_Tmp) return _Tmp->second;
+		pair_type _Pair{ _Mykey, value_type() };
+		return _Mytable::bucket_insert(_Pair).second;
 	}
 };
 _IRIS_END_

@@ -126,6 +126,10 @@ protected:
 		_rehash();
 	}
 
+	const size_t _hash_calc(const _Key& _Mykey) const {
+		return iris::XXH64(_Mykey) & (_Myimp._Maxidx - 1);
+	}
+
 public:
 	using allocator_type = _Al;
 
@@ -133,22 +137,37 @@ public:
 	hashtable(const allocator_type& _A) : _Myimp(_A) {}
 
 public:
-	void bucket_insert(const value_type& _Myvalue) {
+	value_type& bucket_insert(const value_type& _Myvalue) {
 		if (_load() > _MAX_LOAD) _resize();
 
-		const size_t hashed_key = iris::XXH64(_Myextract(_Myvalue)) & (_Myimp._Maxidx - 1);
+		const size_t hashed_key = _hash_calc(_Myextract(_Myvalue));
 
 		_Mybucket_type& bucket = _Myimp._Mytable[hashed_key];
 
 		for (auto& val : bucket) {
 			if (_Myextract(val) == _Myextract(_Myvalue)) {
 				__value_update<value_type>::_S_do_it(val, _Myvalue);
-				return;
+				return val;
 			}
 		}
 
 		bucket.push_back(_Myvalue);
 		++_Myimp._Mysize;
+		return bucket.back();
+	}
+
+	value_type* find_value(const _Key& _Mykey) {
+		const size_t hashed_key = _hash_calc(_Mykey);
+
+		_Mybucket_type& bucket = _Myimp._Mytable[hashed_key];
+
+		for (auto& val : bucket) {
+			if (_Myextract(val) == _Mykey) {
+				return &val;
+			}
+		}
+
+		return nullptr;
 	}
 };
 _IRIS_END_
