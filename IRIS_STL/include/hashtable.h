@@ -73,12 +73,11 @@
 #include <cxx_config.h>
 #include <list.h>
 #include <vector.h>
-#include <hash.h>
 #include <key_extractor.h>
 #include <hashtable_traits.h>
 
 _IRIS_BEGIN_
-template <typename _Key, typename _Val, typename _Al, typename _ExtractKey>
+template <typename _Key, typename _Val, typename _Al, typename _ExtractKey, typename _HashFunction>
 class hashtable {
 protected:
 	typedef typename _Al::template rebind<iris::list<_Val>>::other _Bucket_alloc_type;
@@ -98,6 +97,7 @@ protected:
 
 	_hashtable_imp _Myimp;
 	_ExtractKey	   _Myextract;
+	_HashFunction  _h;
 
 	const float _MAX_LOAD = 0.80f;
 
@@ -106,7 +106,7 @@ protected:
 	}
 
 	const size_t _hash_calc(const _Key& _Mykey) const {
-		return iris::XXH64(_Mykey) & (_Myimp._Maxidx - 1);
+		return _h(_Mykey) & (_Myimp._Maxidx - 1);
 	}
 
 	void _rehash() {

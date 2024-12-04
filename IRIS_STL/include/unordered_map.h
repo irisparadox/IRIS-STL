@@ -30,13 +30,14 @@
 #include <cxx_config.h>
 #include <hashtable.h>
 #include <pair.h>
+#include <hash.h>
 
 _IRIS_BEGIN_
 template <typename _Key, typename _Val, typename _Al = iris::allocator<iris::pair<const _Key,_Val>>>
-class unordered_map : protected hashtable<_Key, iris::pair<const _Key, _Val>, _Al, iris::map_key_extract> {
+class unordered_map : protected hashtable<_Key, iris::pair<const _Key, _Val>, _Al, iris::map_key_extract, iris::hash> {
 	typedef typename _Al::value_type _Myal_value_type;
 
-	typedef hashtable<_Key, iris::pair<const _Key, _Val>, _Al, iris::map_key_extract> _Mytable;
+	typedef hashtable<_Key, iris::pair<const _Key, _Val>, _Al, iris::map_key_extract, iris::hash> _Mytable;
 	typedef typename _Mytable::_Bucket_alloc_type _Bucket_alloc_type;
 
 public:
