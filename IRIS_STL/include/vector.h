@@ -354,11 +354,11 @@ public:
 		return iterator(_Myimp._Mylast, size());
 	}
 
-	const_iterator cbegin() throw() {
+	const_iterator cbegin() const throw() {
 		return const_iterator(_Myimp._Myfirst, 0);
 	}
 
-	const_iterator cend() throw() {
+	const_iterator cend() const throw() {
 		return const_iterator(_Myimp._Mylast, size());
 	}
 

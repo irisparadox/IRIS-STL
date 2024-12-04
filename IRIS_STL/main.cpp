@@ -20,6 +20,13 @@ int main() {
 		map[1];
 		map[5];
 		map[5] = 10;
+
+		iris::unordered_map<int, int>::const_iterator it = map.cbegin();
+		++it;
+		it++;
+
+		map.erase(1);
+		map.erase(12);
 	}
 	return 0;
 }

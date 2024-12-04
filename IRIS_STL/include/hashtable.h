@@ -77,6 +77,44 @@
 #include <hashtable_traits.h>
 
 _IRIS_BEGIN_
+template <typename _Val>
+class _Hashtable_const_iterator {
+public:
+	using _Self   = _Hashtable_const_iterator;
+	using _Vecit  = iris::vector<iris::list<_Val>>::const_iterator;
+	using _Listit = iris::list<_Val>::const_iterator;
+
+	_Hashtable_const_iterator() throw() : _Idxit(), _Idxend(), _Bucketit() {}
+	explicit _Hashtable_const_iterator(_Vecit _Idxfirst, _Vecit _Idxlast) throw() : _Idxit(_Idxfirst), _Idxend(_Idxlast) {
+		if (_Idxit != _Idxend) _Bucketit = _Idxfirst->cbegin();
+	}
+
+	_Self& operator++() throw() {
+		++_Bucketit;
+		if (_Bucketit == _Idxit->cend()) _idx_advance();
+
+		return *this;
+	}
+
+	const _Self operator++(int) throw() {
+		_Self _Tmp = *this;
+		++*this;
+		return _Tmp;
+	}
+	
+private:
+	_Vecit  _Idxit;
+	_Vecit  _Idxend;
+	_Listit _Bucketit;
+
+	void _idx_advance() {
+		while (_Idxit != _Idxend && _Bucketit == _Idxit->cend()) {
+			++_Idxit;
+			if (_Idxit != _Idxend) _Bucketit = _Idxit->cbegin();
+		}
+	}
+};
+
 template <typename _Key, typename _Val, typename _Al, typename _ExtractKey, typename _HashFunction>
 class hashtable {
 protected:
@@ -85,6 +123,8 @@ protected:
 	using value_type = _Val;
 	using _Mybucket_type = iris::list<value_type>;
 	using _Mytable_type = iris::vector<_Mybucket_type>;
+
+	typedef _Hashtable_const_iterator<_Val> const_iterator;
 
 	struct _hashtable_imp : public _Bucket_alloc_type {
 		_Mytable_type _Mytable;
@@ -137,6 +177,11 @@ public:
 	hashtable(const allocator_type& _A) : _Myimp(_A) {}
 
 public:
+	const_iterator cbegin() {
+		return const_iterator(_Myimp._Mytable.cbegin(), _Myimp._Mytable.cend());
+	}
+
+public:
 	value_type& bucket_insert(const value_type& _Myvalue) {
 		if (_load() > _MAX_LOAD) _resize();
 
@@ -158,8 +203,7 @@ public:
 
 	value_type* find_value(const _Key& _Mykey) {
 		const size_t hashed_key = _hash_calc(_Mykey);
-
-		_Mybucket_type& bucket = _Myimp._Mytable[hashed_key];
+		_Mybucket_type& bucket  = _Myimp._Mytable[hashed_key];
 
 		for (auto& val : bucket) {
 			if (_Myextract(val) == _Mykey) {
@@ -168,6 +212,25 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	_Mybucket_type& operator[](int _Idx) {
+		return _Myimp._Mytable[_Idx];
+	}
+
+	size_t erase(const _Key& _Mykey) {
+		const size_t hashed_key = _hash_calc(_Mykey);
+		_Mybucket_type& bucket  = _Myimp._Mytable[hashed_key];
+
+		for (auto it = bucket.begin(); it != bucket.end(); ++it) {
+			if (_Myextract(*it) == _Mykey) {
+				bucket.erase(it);
+				--_Myimp._Mysize;
+				return 1;
+			}
+		}
+
+		return 0;
 	}
 };
 _IRIS_END_

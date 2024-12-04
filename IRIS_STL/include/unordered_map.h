@@ -53,18 +53,32 @@ public:
 	using const_value_ref = const _Val&;
 	using pair_type		  = iris::pair<const _Key, _Val>;
 	using allocator_type  = _Al;
+	using size_type		  = size_t;
+
+	typedef typename _Mytable::const_iterator const_iterator;
 
 protected:
 	using _Mytable::_Myimp;
 	using _Mytable::bucket_insert;
 	using _Mytable::find_value;
+	using _Mytable::erase;
+	using _Mytable::cbegin;
 
 public:
 	unordered_map() : _Mytable() {}
 
 public:
+	const_iterator cbegin() {
+		return _Mytable::cbegin();
+	}
+
+public:
 	void insert(const pair_type& _Mypair) {
 		_Mytable::bucket_insert(_Mypair);
+	}
+
+	size_type erase(const _Key& _Mykey) {
+		return _Mytable::erase(_Mykey);
 	}
 
 	value_type& operator[](const _Key& _Mykey) {

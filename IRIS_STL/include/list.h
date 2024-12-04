@@ -149,7 +149,7 @@ public:
 		return !(*this == _Right);
 	}
 
-protected:
+public:
 	_Node* _Ptr;
 	difference_type _Idx;
 };
@@ -169,7 +169,7 @@ public:
 	_List_iterator() throw() : _Mybase() {}
 	explicit _List_iterator(_Node* _Pnode) : _Mybase(_Pnode) {}
 
-protected:
+public:
 	using _Mybase::_Ptr;
 	using _Mybase::_Idx;
 
@@ -358,11 +358,11 @@ public:
 		return iterator(_Myimp._Myhead);
 	}
 
-	const_iterator cbegin() {
+	const_iterator cbegin() const {
 		return const_iterator(_Myimp._Myhead->_Next);
 	}
 
-	const_iterator cend() {
+	const_iterator cend() const {
 		return const_iterator(_Myimp._Myhead);
 	}
 
@@ -426,31 +426,34 @@ public:
 
 	void pop_back() {
 		_Nodeptr _node_to_delete = _Myimp._Myhead->_Prev;
-		_node_to_delete->_unhook();
-#if __CXX_HASCXX0X__
-		_Getnodal().destroy(_node_to_delete);
-#else
-		_Getyal().destroy(iris::__addressof(_node_to_delete->_Myval));
-#endif // __CXX_HASCXX0X__
-
-		del_node(_node_to_delete);
-		--_Myimp._Mysize;
+		_erase(_node_to_delete);
 	}
 
 	void pop_front() {
 		_Nodeptr _node_to_delete = _Myimp._Myhead->_Next;
+		_erase(_node_to_delete);
+	}
+
+public:
+	iterator erase(iterator _Pos) {
+		iterator _ret = iterator(_Pos._Ptr->_Next);
+		_erase(_Pos._Ptr);
+		return _ret;
+	}
+
+private:
+
+	void _erase(_Nodeptr _node_to_delete) {
 		_node_to_delete->_unhook();
 #if __CXX_HASCXX0X__
 		_Getnodal().destroy(_node_to_delete);
 #else
 		_Getyal().destroy(iris::__addressof(_node_to_delete->_Myval));
 #endif // __CXX_HASCXX0X__
-		
+
 		del_node(_node_to_delete);
 		--_Myimp._Mysize;
 	}
-
-private:
 
 #if __CXX_HASCXX0X__
 	template <typename... _Types>
